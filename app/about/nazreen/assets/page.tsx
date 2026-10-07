@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { readdir } from "node:fs/promises";
-import { join } from "node:path";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import AssetGallery, { type GalleryAsset } from "@/src/components/AssetGallery";
@@ -13,13 +11,13 @@ export const metadata: Metadata = {
 };
 
 const assetDetails: Record<string, Pick<GalleryAsset, "title" | "project" | "description">> = {
-  "pavilion-pusaka.fbx": {
+  "pavilion-pusaka.glb": {
     title: "Pavilion",
     project: "PUSAKA",
     description:
       "A pavilion asset for the world of PUSAKA. Rotate and zoom to examine its form and construction from every angle.",
   },
-  "watchtower-pusaka.fbx": {
+  "watchtower-pusaka.glb": {
     title: "Watchtower",
     project: "PUSAKA",
     description:
@@ -28,41 +26,24 @@ const assetDetails: Record<string, Pick<GalleryAsset, "title" | "project" | "des
 };
 
 const assetOrder: Record<string, number> = {
-  "pavilion-pusaka.fbx": 0,
-  "watchtower-pusaka.fbx": 1,
+  "pavilion-pusaka.glb": 0,
+  "watchtower-pusaka.glb": 1,
 };
 
-function titleFromFilename(filename: string) {
-  return filename
-    .replace(/\.fbx$/i, "")
-    .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-async function getAssets(): Promise<GalleryAsset[]> {
-  const directory = join(process.cwd(), "public", "models", "nazreen");
-  const entries = await readdir(directory, { withFileTypes: true });
-
-  return entries
-    .filter((entry) => entry.isFile() && /\.fbx$/i.test(entry.name))
-    .sort((a, b) =>
-      (assetOrder[a.name] ?? Number.MAX_SAFE_INTEGER) -
-        (assetOrder[b.name] ?? Number.MAX_SAFE_INTEGER) ||
-      a.name.localeCompare(b.name),
-    )
-    .map((entry) => ({
-      id: entry.name,
-      url: `/models/nazreen/${encodeURIComponent(entry.name)}`,
-      title: assetDetails[entry.name]?.title ?? titleFromFilename(entry.name),
-      project: assetDetails[entry.name]?.project ?? "KenyalangKu",
-      description:
-        assetDetails[entry.name]?.description ??
-        "Explore this 3D asset by Nazreen Bin Abdul Radzak from every angle.",
+// The gallery lists its models explicitly so the page needs no file-system access
+// at runtime (Cloudflare Workers has none). Add new models to assetDetails and assetOrder.
+function getAssets(): GalleryAsset[] {
+  return Object.keys(assetDetails)
+    .sort((a, b) => (assetOrder[a] ?? Number.MAX_SAFE_INTEGER) - (assetOrder[b] ?? Number.MAX_SAFE_INTEGER))
+    .map((filename) => ({
+      id: filename,
+      url: `/models/nazreen/${encodeURIComponent(filename)}`,
+      ...assetDetails[filename],
     }));
 }
 
-export default async function NazreenAssetsPage() {
-  const assets = await getAssets();
+export default function NazreenAssetsPage() {
+  const assets = getAssets();
 
   return (
     <main id="main" className={styles.page}>
