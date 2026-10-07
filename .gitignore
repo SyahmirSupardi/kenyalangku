@@ -43,3 +43,8 @@ next-env.d.ts
 .vercel
 
 /.cache/
+
+# Cloudflare (OpenNext)
+.open-next
+.wrangler
+.dev.vars

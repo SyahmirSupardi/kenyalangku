@@ -2,7 +2,7 @@
 
 import { Component, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useFBX, useProgress } from "@react-three/drei";
+import { OrbitControls, useGLTF, useProgress } from "@react-three/drei";
 import { Box3, Mesh, Vector3 } from "three";
 import { Camera, Download, Pause, Play, RotateCcw } from "lucide-react";
 import styles from "./ModelViewer.module.css";
@@ -12,9 +12,10 @@ type ModelViewerProps = {
   name: string;
 };
 
-// The React Bits Model Viewer interaction, focused on FBX assets for this gallery.
-function FbxModel({ url, onLoaded }: { url: string; onLoaded: () => void }) {
-  const loaded = useFBX(url);
+// The React Bits Model Viewer interaction, for the gallery's Draco-compressed GLB
+// assets. The Draco decoder is served locally from /draco/.
+function AssetModel({ url, onLoaded }: { url: string; onLoaded: () => void }) {
+  const loaded = useGLTF(url, "/draco/").scene;
   const { model, scale, center } = useMemo(() => {
     const model = loaded.clone(true);
     const bounds = new Box3().setFromObject(model);
@@ -115,7 +116,7 @@ export default function ModelViewer({ url, name }: ModelViewerProps) {
           <directionalLight position={[-5, 2, -3]} intensity={1.35} color="#8dc4da" />
           <gridHelper args={[8, 16, "#8b6b3f", "#26343c"]} position={[0, -1.65, 0]} />
           <Suspense fallback={null}>
-            <FbxModel url={url} onLoaded={handleLoaded} />
+            <AssetModel url={url} onLoaded={handleLoaded} />
           </Suspense>
           <OrbitControls
             makeDefault

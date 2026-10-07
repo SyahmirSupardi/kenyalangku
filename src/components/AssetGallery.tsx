@@ -52,7 +52,7 @@ export default function AssetGallery({ assets }: { assets: GalleryAsset[] }) {
               <span className={styles.assetLabel}>
                 <span>{asset.project}</span>
                 <strong>{asset.title}</strong>
-                <small>INTERACTIVE FBX MODEL</small>
+                <small>INTERACTIVE 3D MODEL</small>
               </span>
               <MoveUpRight size={18} aria-hidden="true" />
             </button>
