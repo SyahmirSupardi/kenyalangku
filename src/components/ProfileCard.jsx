@@ -370,5 +370,3 @@ const ProfileCard = ({
 };
 
 export default memo(ProfileCard);
-
-\n
