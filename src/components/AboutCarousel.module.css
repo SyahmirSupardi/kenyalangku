@@ -1,7 +1,7 @@
 .carousel {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(350px, 0.92fr);
-  gap: clamp(34px, 6.4vw, 92px);
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: clamp(22px, 3vw, 42px);
   align-items: stretch;
   min-height: 570px;
   padding-bottom: 4px;
@@ -9,85 +9,31 @@
 }
 
 .visual {
-  position: relative;
+  display: grid;
   min-height: 570px;
-  overflow: hidden;
-  border: 1px solid rgba(189, 208, 209, 0.18);
-  background:
-    radial-gradient(circle at 56% 42%, rgba(196, 83, 64, 0.19), transparent 46%),
-    #10191e;
-  isolation: isolate;
+  place-items: center;
 }
 
-.visual::before,
-.visual::after {
-  position: absolute;
-  z-index: 2;
-  content: "";
-  pointer-events: none;
+.profileCard {
+  width: min(100%, 440px);
 }
 
-.visual::before {
-  inset: 17px;
-  border: 1px solid rgba(226, 226, 214, 0.22);
+.profileCard :global(.profile-card__tile) {
+  aspect-ratio: 4 / 5;
 }
 
-.visual::after {
-  inset: 0;
-  background: linear-gradient(180deg, rgba(4, 8, 11, 0.12), transparent 42%, rgba(4, 8, 11, 0.78));
+.profileCard :global(.profile-card__photo) {
+  object-position: center 43%;
+  filter: saturate(0.88) contrast(1.03);
 }
 
-.visualImage {
-  z-index: 1;
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(0.78) contrast(1.04);
-  animation: image-arrive 900ms cubic-bezier(0.2, 0.65, 0.25, 1) both;
+.profileCard :global(.profile-card__holo) {
+  --pc-spectrum: repeating-linear-gradient(0deg, #d6801f 5%, #f5bc54 12%, #805729 20%, #eaa124 28%, #d6801f 36%);
+  --pc-bars: repeating-linear-gradient(-45deg, #0b1115 0%, #d2aa65 5%, #0b1115 11%);
 }
 
-.founderVisual .visualImage {
-  object-position: center 58%;
-}
-
-.nazreenVisual .visualImage {
-  object-position: center 60%;
-  filter: saturate(0.68) contrast(1.04);
-}
-
-.contain .visualImage {
-  object-fit: contain;
-  padding: 7% 4% 3%;
-  filter: saturate(0.72) contrast(1.05) drop-shadow(0 20px 34px rgba(0, 0, 0, 0.4));
-}
-
-.visualShade {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  background: linear-gradient(115deg, rgba(6, 12, 16, 0.06), transparent 48%, rgba(6, 12, 16, 0.16));
-  pointer-events: none;
-}
-
-.visualIndex,
-.visualCaption {
-  position: absolute;
-  z-index: 3;
-  left: clamp(27px, 3vw, 42px);
-  color: #e2e2d6;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-}
-
-.visualIndex {
-  top: clamp(29px, 3vw, 44px);
-  color: #eaa124;
-}
-
-.visualCaption {
-  right: 26px;
-  bottom: clamp(29px, 3vw, 42px);
-  line-height: 1.5;
+.profileCard :global(.profile-card__name) {
+  font-size: clamp(18px, 1.8vw, 23px);
 }
 
 .story {
@@ -145,6 +91,14 @@
   font-size: clamp(34px, 4.1vw, 56px);
 }
 
+.story h2.nazrinTitle {
+  font-size: clamp(38px, 4.4vw, 64px);
+}
+
+.story h2.danielTitle {
+  font-size: clamp(28px, 3.4vw, 50px);
+}
+
 .storyRule {
   width: 68px;
   height: 1px;
@@ -153,10 +107,10 @@
 }
 
 .story p {
-  max-width: 470px;
+  max-width: 100%;
   color: #b6c0bc;
-  font-size: 13px;
-  line-height: 1.9;
+  font-size: 14px;
+  line-height: 1.85;
 }
 
 .storyLink {
@@ -264,11 +218,6 @@
   cursor: not-allowed;
 }
 
-@keyframes image-arrive {
-  from { opacity: 0.35; transform: scale(1.025); }
-  to { opacity: 1; transform: scale(1); }
-}
-
 @keyframes copy-arrive {
   from { opacity: 0; transform: translateY(9px); }
   to { opacity: 1; transform: translateY(0); }
@@ -276,8 +225,8 @@
 
 @media (max-width: 1050px) {
   .carousel {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
-    gap: 35px;
+    grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+    gap: 26px;
     min-height: 490px;
   }
   .visual { min-height: 490px; }
@@ -291,14 +240,8 @@
     gap: 0;
     min-height: 0;
   }
-  .visual {
-    min-height: 0;
-    aspect-ratio: 1.15;
-  }
-  .visual::before { inset: 12px; }
-  .visualIndex,
-  .visualCaption { left: 23px; font-size: 12px; }
-  .visualCaption { right: 20px; }
+  .visual { min-height: 0; }
+  .profileCard { width: min(100%, 430px); }
   .story { min-height: 385px; padding: 30px 0 0; }
   .story h2 { max-width: 580px; margin: 25px 0 22px; font-size: clamp(40px, 9vw, 58px); }
   .story p { font-size: 12px; }
@@ -307,7 +250,7 @@
 }
 
 @media (max-width: 420px) {
-  .visual { aspect-ratio: 0.98; }
+  .profileCard { width: 100%; }
   .story { min-height: 405px; }
   .storyMeta { font-size: 12px; }
   .controls { gap: 8px; }
@@ -317,7 +260,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .visualImage,
   .storyContent { animation: none; }
   .storyLink,
   .arrow,

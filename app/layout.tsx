@@ -7,7 +7,7 @@ import SiteFooter from "@/src/components/SiteFooter";
 import SiteLoader from "@/src/components/SiteLoader";
 import PageBackdrop from "@/src/components/PageBackdrop";
 import "./globals.css";
-import "../public/night-walk/footer-9.css";
+import "../public/night-walk/footer-7.css";
 import "../public/night-walk/intro.css";
 import "./inner-pages.css";
 
@@ -20,17 +20,17 @@ const manrope = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "KenyalangKu — Rooted in heritage. Made for the world.",
-    template: "%s | KenyalangKu",
+    default: "KenyalangKu Studio",
+    template: "%s | KenyalangKu Studio",
   },
   description:
     "An independent Malaysian game studio creating culturally rooted games for a global audience. Discover PUSAKA, MYTH: TANAH, and the story behind KenyalangKu.",
-  applicationName: "KenyalangKu",
+  applicationName: "KenyalangKu Studio",
   openGraph: {
     type: "website",
     locale: "en_MY",
     siteName: "KenyalangKu",
-    title: "KenyalangKu — Culture through play",
+    title: "KenyalangKu Studio",
     description:
       "Malaysian stories. New worlds. Discover an independent game studio rooted in heritage and imagination.",
   },

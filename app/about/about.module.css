@@ -48,10 +48,10 @@
 }
 
 .introRow {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  align-items: center;
+  gap: clamp(24px, 3vw, 44px);
   margin-top: 25px;
 }
 
@@ -65,20 +65,41 @@
 }
 
 .introRow h1 span {
+  display: block;
   color: var(--about-amber);
+  font-size: 0.79em;
+  white-space: nowrap;
 }
 
-.introRow p {
-  max-width: 325px;
+.introCopy {
+  max-width: 390px;
   padding-bottom: 7px;
+}
+
+.introCopy p {
   color: #aeb8b4;
-  font-size: 12px;
-  line-height: 1.9;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.7;
+}
+
+.introCopy p + p {
+  margin-top: 16px;
 }
 
 .carouselWrap {
   padding-bottom: clamp(54px, 8vw, 104px);
 }
+
+.teamTitle {
+  margin: 0 0 26px;
+  color: var(--about-bone);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.05;
+}
+
+.teamTitle span { color: var(--about-amber); }
 
 .closing {
   display: flex;
@@ -113,13 +134,19 @@
   color: var(--about-amber);
 }
 
+@media (max-width: 1050px) {
+  .introRow { grid-template-columns: 1fr; }
+  .introCopy { max-width: 650px; margin-top: 24px; }
+}
+
 @media (max-width: 760px) {
   .inner { width: min(calc(100% - 40px), 1320px); }
   .intro { padding-top: 46px; padding-bottom: 28px; }
   .eyebrow { font-size: 12px; letter-spacing: 0.14em; }
   .introRow { display: block; margin-top: 22px; }
   .introRow h1 { font-size: clamp(47px, 11vw, 76px); }
-  .introRow p { max-width: 340px; margin-top: 18px; font-size: 12px; }
+  .introCopy { max-width: 560px; margin-top: 24px; }
+  .introCopy p { font-size: 14px; }
   .carouselWrap { padding-bottom: 58px; }
   .closing { align-items: flex-start; padding-bottom: 26px; }
   .closing span { max-width: 175px; line-height: 1.7; }
@@ -128,6 +155,7 @@
 @media (max-width: 420px) {
   .inner { width: calc(100% - 32px); }
   .introRow h1 { font-size: 47px; }
+  .introRow h1 span { font-size: 0.67em; }
   .closing { flex-direction: column; gap: 15px; }
 }
 

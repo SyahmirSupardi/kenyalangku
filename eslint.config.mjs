@@ -18,6 +18,7 @@ const eslintConfig = defineConfig([
     ".wrangler/**",
     "public/draco/**",
     "public/night-walk/vendor/**",
+    "public/night-walk/project-folders-bundle.js",
   ]),
 ]);
 

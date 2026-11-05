@@ -28,13 +28,13 @@ export default function Contact() {
             <Mail className={styles.icon} aria-hidden="true" strokeWidth={1.5} />
             <h2>Email</h2>
             <p>For collaborations, questions, or a hello.</p>
-            <a href="mailto:kenyalangku@gmail.com">kenyalangku@gmail.com</a>
+            <a href="mailto:admin@kenyalangku.my">admin@kenyalangku.my</a>
           </article>
           <article className={styles.channel}>
             <MapPin className={styles.icon} aria-hidden="true" strokeWidth={1.5} />
             <h2>Studio location</h2>
-            <p>Our home in East Malaysia.</p>
-            <span>Kuching, Sarawak</span>
+            <p>Our home in both West and East Malaysia.</p>
+            <span>Selangor & Sarawak</span>
           </article>
           <article className={styles.channel}>
             <Phone className={styles.icon} aria-hidden="true" strokeWidth={1.5} />

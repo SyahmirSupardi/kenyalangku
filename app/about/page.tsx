@@ -7,7 +7,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About us",
   description:
-    "Meet KenyalangKu founder Syahmir Supardi and 3D Asset Designer Nazreen Bin Abdul Radzak.",
+    "Meet the KenyalangKu team: Syahmir Supardi, Nazreen Bin Abdul Radzak, Ku Nazrin Ardy, and Muhammad Daniel Erfan Bin Arbain.",
 };
 
 export default function About() {
@@ -23,14 +23,15 @@ export default function About() {
               Rooted here.<br />
               <span>Imagined everywhere.</span>
             </h1>
-            <p>
-              An independent Malaysian game studio founded by Syahmir Supardi, creating
-              culturally rooted worlds for players everywhere.
-            </p>
+            <div className={styles.introCopy}>
+              <p>We are KenyalangKu. An independent Malaysian game studio, beginning with the stories closest to home.</p>
+              <p>Heritage, mythology, landscapes, and imagination are our starting points. We turn them into experiences that invite people everywhere to be curious about Malaysia.</p>
+            </div>
           </div>
         </section>
 
-        <section className={styles.carouselWrap} aria-label="Our story and purpose">
+        <section className={styles.carouselWrap} aria-labelledby="team-title">
+          <h2 id="team-title" className={styles.teamTitle}>Meet the <span>Team</span></h2>
           <AboutCarousel />
         </section>
 

@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
-import ProjectCarousel from "@/src/components/ProjectCarousel";
-import { projects } from "@/src/lib/content";
+import ProjectFolderCollection from "@/src/components/ProjectFolderCollection";
+import styles from "./projects.module.css";
+
 export const metadata: Metadata = {
   title: "Our projects",
-  description:
-    "Discover PUSAKA, an online multiplayer Silat fighting game, and MYTH: TANAH, a Malaysian-inspired fantasy action-adventure.",
+  description: "Explore KenyalangKu's flagship games and special initiatives: PUSAKA, MYTH: TANAH, and Genesis Roulette.",
 };
+
 export default function Projects() {
-  return (
-    <main id="main">
-      <ProjectCarousel items={projects.map(({ slug, title, subtitle, category, image, imageAlt, number, status }) => ({ slug, title, subtitle, category, image, imageAlt, number, status }))} />
-    </main>
-  );
+  return <main id="main" className={styles.page}>
+    <header className={styles.intro}>
+      <p className={styles.eyebrow}>KENYALANGKU / OUR PROJECTS</p>
+      <h1>Worlds in <em>the making.</em></h1>
+      <p>Explore our flagship games and the ideas taking shape beyond them. Open a folder to discover each project.</p>
+    </header>
+    <ProjectFolderCollection />
+  </main>;
 }

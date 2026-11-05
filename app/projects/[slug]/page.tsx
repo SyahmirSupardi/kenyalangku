@@ -30,10 +30,10 @@ export default async function ProjectPage({
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
   const story = projectStories[slug];
-  const next = projects.find(p => p.slug !== slug)!;
+  const next = projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length];
   const icons = [Compass, MoveUpRight, Users, Sparkles];
   return (
-    <main id="main" className={styles.page}>
+    <main id="main" className={`${styles.page} ${slug === "pusaka" ? styles.pusakaPage : ""}`}>
       <section className={styles.hero} aria-labelledby="project-title">
         <Image className={styles.heroImage} src={project.image} alt={project.imageAlt} fill loading="eager" fetchPriority="high" sizes="(max-width: 760px) 1320px, 100vw" />
         <div className={styles.heroShade} />
@@ -43,17 +43,17 @@ export default async function ProjectPage({
             <nav aria-label="Project chapters"><a href="#story">The story</a><a href="#roadmap">Roadmap</a><a href="#connect">Connect <ArrowUpRight size={14} /></a></nav>
           </div>
           <div className={styles.heroTitle}>
-            <p className={styles.eyebrow}>KENYALANGKU ORIGINAL / {project.number}</p>
-            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
+            <p className={styles.eyebrow}>{project.collection.toUpperCase()} / {project.number}</p>
+            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "genesis-roulette" ? styles.coverTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
               {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={1774} height={887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
             </h1>
             <p className={styles.subtitle}>{project.subtitle}</p>
           </div>
           <div className={styles.heroBottom}>
             <div className={styles.previewCards}>
-              {story.roadmap.map((item, i) => (
-                <a href={i === 0 ? "#story" : i === 1 ? "#roadmap" : "#experience"} className={styles.previewCard} key={item.title}>
-                  <Image src={story.previewArtwork?.[i]?.src ?? item.image} alt={story.previewArtwork?.[i]?.alt ?? ""} fill sizes="320px" style={{ objectPosition: item.position, objectFit: story.previewArtwork?.[i]?.fit ?? "cover" }} />
+              {story.roadmap.slice(0, 3).map((item, i) => (
+                <a href={i === 0 ? "#story" : i === 1 ? "#roadmap" : "#experience"} className={`${styles.previewCard} ${slug === "pusaka" && i === 0 ? styles.pusakaIconCard : ""}`} key={item.title}>
+                  <Image src={story.previewArtwork?.[i]?.src ?? item.image ?? project.image} alt={story.previewArtwork?.[i]?.alt ?? item.alt ?? ""} fill sizes="320px" style={{ objectPosition: item.position, objectFit: story.previewArtwork?.[i]?.fit ?? "cover" }} />
                   <span>0{i + 1}<br /><b>{["The story", "The journey", "The experience"][i]}</b></span>
                   <ArrowUpRight size={15} />
                 </a>
@@ -71,10 +71,10 @@ export default async function ProjectPage({
           <div className={styles.storyGrid}>
             <aside className={styles.facts}>
               <p className={styles.eyebrow}>{story.role}</p>
-              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div><div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
+              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div>{slug === "pusaka" && <div><dt>Platform</dt><dd className={styles.platformIcons}><span className={styles.visuallyHidden}>Planned for </span><span title="Windows PC (planned)"><Image src="/images/projects/platform-windows.svg" alt="Windows PC" width={23} height={23} /></span><span title="Steam (planned)"><Image src="/images/projects/platform-steam.svg" alt="Steam" width={23} height={23} /></span></dd></div>}<div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
               <a href="#roadmap" className={styles.textLink}>Follow the journey <ArrowDown size={16} /></a>
             </aside>
-            <div className={styles.prose}><p className={styles.lead}>{story.statement}</p>{project.paragraphs.slice(0, 2).map(p => <p key={p}>{p}</p>)}</div>
+            <div className={styles.prose}><p className={slug === "pusaka" ? styles.pusakaLead : styles.lead}>{story.statement}</p>{(slug === "pusaka" ? project.paragraphs.slice(1) : project.paragraphs.slice(0, 2)).map(p => <p key={p}>{p}</p>)}</div>
           </div>
         </section>
 
@@ -85,15 +85,15 @@ export default async function ProjectPage({
               <p className={styles.eyebrow}>DEVELOPMENT ROADMAP</p>
               <h3>From the first idea<br />to the hands of players.</h3>
               <p>Each world takes time, curiosity, and careful iteration. This is the direction ahead for {project.title}.</p>
-              <p className={styles.planningNote}>A proposed development sequence. Milestones and release dates have not been announced.</p>
+              <p className={styles.planningNote}>{slug === "pusaka" ? "Current progress and planned direction. Release dates have not been announced." : "A proposed development sequence. Milestones and release dates have not been announced."}</p>
               <Link className={styles.textLink} href="/collaboration">Connect about this project <ArrowUpRight size={16} /></Link>
             </div>
             <ol className={styles.timeline}>
               {story.roadmap.map((stage, i) => (
                 <li key={stage.title}>
                   <span className={styles.timelineDot} aria-hidden="true" />
-                  <div className={styles.stageCopy}><p className={styles.stageLabel}>PHASE 0{i + 1} <span>PLANNED DIRECTION</span></p><h3>{stage.title}</h3><p>{stage.text}</p></div>
-                  <figure className={styles.stageImage}><Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 760px) 78vw, 360px" style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / CONCEPT STUDY</figcaption></figure>
+                  <div className={styles.stageCopy}><p className={styles.stageLabel}>PHASE 0{i + 1} <span>{stage.status ?? "PLANNED DIRECTION"}</span></p><h3>{stage.title}</h3>{stage.subtitle && <p className={styles.stageSubtitle}>{stage.subtitle}</p>}<p>{stage.text}</p>{stage.detail && <p>{stage.detail}</p>}</div>
+                  {stage.image && <figure className={styles.stageImage}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / DEVELOPMENT PROGRESS</figcaption></figure>}
                 </li>
               ))}
             </ol>
@@ -115,7 +115,7 @@ export default async function ProjectPage({
         <div className={styles.closingShade} />
         <div className={styles.closingContent}><p className={styles.eyebrow}>BE PART OF THE NEXT CHAPTER</p><h2 id="connect-title">Every world begins<br />with a conversation.</h2><p>Creators, cultural voices, publishers, and potential investors — let’s talk about {project.title}.</p><Link href="/contact" className={styles.contactButton}>Talk about this project <ArrowUpRight size={18} /></Link></div>
       </section>
-      <div className={styles.nextProject}><Link href="/projects"><ArrowLeft size={17} /> Back to all projects</Link><Link href={`/projects/${next.slug}`}><span>EXPLORE THE OTHER WORLD</span><b>{next.title} <ArrowUpRight size={22} /></b></Link></div>
+      <div className={styles.nextProject}><Link href="/projects"><ArrowLeft size={17} /> Back to all projects</Link><Link href={`/projects/${next.slug}`}><span>EXPLORE ANOTHER PROJECT</span><b>{next.title} <ArrowUpRight size={22} /></b></Link></div>
     </main>
   );
 }

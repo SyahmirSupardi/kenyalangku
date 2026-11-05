@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:homepage-folders": "node scripts/build-project-folders.mjs",
+    "predev": "npm run build:homepage-folders",
+    "prebuild": "npm run build:homepage-folders",
     "experience": "node scripts/serve-experience.mjs",
     "dev": "next dev",
     "build": "next build",
