@@ -6,7 +6,8 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 
 - Local project: `D:\kenyalangku`; development URL when running: `http://localhost:3000`.
 - GitHub remote: `https://github.com/SyahmirSupardi/kenyalangku.git`.
-- Public production URL: `https://kenyalangku.vercel.app`. Vercel project: `kenyalangku` in `syahmirsupardis-projects` (`prj_g0CJRpn1E2pqj23NYTodsvMINue6`). The 2026-11-06 production deployment `dpl_GfnbqX8LeY8Uoobfni1HhxwKXkLE` built successfully; the homepage, active inner pages, and logo asset returned HTTP 200.
+- Primary production URL: `https://www.kenyalangku.my` on Cloudflare Workers. The `kenyalangku` Worker in the Takeo Takeshi account was deployed on 2026-11-06 as version `aa58806f-5460-4f56-87b3-9427b25b9a38`. The checked pages and Steam icon asset returned HTTP 200. The bare `kenyalangku.my` hostname had no public DNS answer when checked; `www` is the verified live address.
+- The Vercel project remains linked locally as an earlier hosting target. It is not the default release destination. The last verified Vercel deployment was `dpl_7jVimyx8KJY89LPARqyu6JN5XQfr` at `https://kenyalangku.vercel.app`.
 - The homepage is the standalone Kenyalang journey. Inner pages use Next.js 16. `vercel.json` sets the Next.js framework so the inner routes deploy correctly.
 - Active routes: `/`, `/about`, `/about/nazreen/assets`, `/projects`, `/projects/pusaka`, `/projects/myth-tanah`, `/projects/genesis-roulette`, `/collaboration`, and `/contact`.
 - Project ordering: PUSAKA, MYTH: TANAH, then Genesis Roulette under Special Initiatives. Nazreen's interactive asset ordering: Pavilion, then Watchtower.
@@ -15,8 +16,8 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 ## Release notes
 
 - The 2026-11-06 GitHub release includes the updated studio pages, PUSAKA roadmap and platform icons, project categories, collaboration content, and mobile adjustments. Current remote branch history has no Claude co-author trailers; earlier branch history was rewritten to remove those trailers without changing file trees.
-- The Vercel deployment was made directly from the CLI. Automatic GitHub-to-Vercel integration is not connected; its connection request was rejected by automatic approval review because it would grant ongoing external Git access beyond the requested one-time release. A future push will require a separate deployment unless that integration is explicitly approved.
-- `npm run lint` passed with four existing warnings; `npm run typecheck` passed. Vercel's Next.js production build passed. A local production build was interrupted by a sandbox process/file permission error, so the Vercel build is the verified production build.
+- Cloudflare is the primary release target. The OpenNext Cloudflare build and Worker deployment passed on 2026-11-06; this deployment was made directly from the CLI and does not establish automatic GitHub-to-Cloudflare releases.
+- `npm run lint` passed with four existing warnings; `npm run typecheck` passed. The OpenNext Cloudflare production build passed. A previous local Next.js build was interrupted by a sandbox process/file permission error.
 
 ## Handoff rule
 
