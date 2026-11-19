@@ -34,7 +34,7 @@ export default async function ProjectPage({
   const icons = [Compass, MoveUpRight, Users, Sparkles];
   const fullStory = slug === "pusaka" || slug === "genesis-roulette";
   return (
-    <main id="main" className={`${styles.page} ${slug === "pusaka" ? styles.pusakaPage : ""} ${slug === "genesis-roulette" ? styles.genesisPage : ""}`}>
+    <main id="main" className={`${styles.page} ${slug === "pusaka" ? styles.pusakaPage : ""}`}>
       <section className={styles.hero} aria-labelledby="project-title">
         <Image className={styles.heroImage} src={project.image} alt={project.imageAlt} fill loading="eager" fetchPriority="high" sizes="(max-width: 760px) 1320px, 100vw" />
         <div className={styles.heroShade} />
@@ -44,9 +44,9 @@ export default async function ProjectPage({
             <nav aria-label="Project chapters"><a href="#story">The story</a><a href="#roadmap">Roadmap</a><a href="#connect">Connect <ArrowUpRight size={14} /></a></nav>
           </div>
           <div className={styles.heroTitle}>
-            <p className={styles.eyebrow}>{project.collection.toUpperCase()} / {project.number}</p>
-            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "genesis-roulette" ? styles.coverTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
-              {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={1774} height={887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
+            {!story.hideEyebrow && <p className={styles.eyebrow}>{project.collection.toUpperCase()} / {project.number}</p>}
+            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
+              {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={story.titleArtworkSize?.[0] ?? 1774} height={story.titleArtworkSize?.[1] ?? 887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
             </h1>
             <p className={styles.subtitle}>{project.subtitle}</p>
           </div>
@@ -72,7 +72,7 @@ export default async function ProjectPage({
           <div className={styles.storyGrid}>
             <aside className={styles.facts}>
               <p className={styles.eyebrow}>{story.role}</p>
-              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div>{slug === "pusaka" && <div><dt>Platform</dt><dd className={styles.platformIcons}><span className={styles.visuallyHidden}>Planned for </span><span title="Windows PC (planned)"><Image src="/images/projects/platform-windows.svg" alt="Windows PC" width={23} height={23} /></span><span title="Steam (planned)"><Image src="/images/projects/platform-steam.svg" alt="Steam" width={23} height={23} /></span></dd></div>}{story.platform && <div><dt>Platform</dt><dd>{story.platform}</dd></div>}<div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
+              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div>{story.platforms && <div><dt>Platform</dt><dd className={styles.platformIcons}>{story.platforms.map(pl => <span key={pl.label} title={pl.label}><Image src={pl.icon} alt={pl.label} width={23} height={23} /></span>)}</dd></div>}<div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
               <a href="#roadmap" className={styles.textLink}>Follow the journey <ArrowDown size={16} /></a>
             </aside>
             <div className={styles.prose}><p className={fullStory ? styles.pusakaLead : styles.lead}>{story.statement}</p>{(fullStory ? project.paragraphs.slice(1) : project.paragraphs.slice(0, 2)).map(p => <p key={p}>{p}</p>)}</div>

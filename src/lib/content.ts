@@ -55,8 +55,9 @@ export const projects = [
     number: "03",
     description:
       "Genesis Roulette is a mobile tactical duel game. Gamble a row of identical eggs in a roulette shootout, secretly give the survivors elemental powers, and out-read your rival in simultaneous duels.",
-    image: "/images/projects/genesis-roulette-cover.png",
-    imageAlt: "Genesis Roulette cover art showing a futuristic arena, elemental eggs, and a floating drone",
+    image: "/images/projects/genesis-roulette-sunset-arena.png",
+    imageAlt:
+      "Genesis Roulette key art: two rival scientists face a glowing crystal egg on an arena above the clouds at sunset",
     imageLabel: "Key art · Closed alpha",
     details: ["Tactical duel", "Push-your-luck roulette", "Mobile 1v1"],
     paragraphs: [

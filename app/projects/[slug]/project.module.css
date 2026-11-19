@@ -13,7 +13,6 @@
 .eyebrow { font-size: 12px; color: #e9bf7c; letter-spacing: .14em; line-height: 1.6; text-transform: uppercase; }
 .heroTitle h1 { margin: 8px 0 13px; font-size: clamp(85px, 13vw, 196px); line-height: 1; font-weight: 550; letter-spacing: -.06em; text-shadow: 0 2px 32px #080c1022; }
 .heroTitle h1.longTitle { font-size: clamp(60px, 10vw, 153px); }
-.heroTitle h1.coverTitle { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .heroTitle h1.logoTitle { width: clamp(290px, 34vw, 520px); font-size: 0; line-height: 0; letter-spacing: 0; }
 .logoTitleImage { display: block; width: 100%; height: auto; filter: drop-shadow(0 5px 18px #0009); }
 .subtitle { font-size: clamp(15px, 1.5vw, 21px); color: #f5efdf; text-shadow: 0 1px 14px #000; }
@@ -23,7 +22,6 @@
 .previewCard > img { object-fit: cover; }
 .pusakaIconCard > img { transform: scale(1.32); }
 .genesisIconCard > img { transform: scale(1.18); background: #05080d; }
-.genesisPage .heroTitle { margin-top: max(24px, calc(17vw - 70px)); margin-bottom: 40px; }
 .previewCard::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 20%, #050a0edb); }
 .previewCard > span { position: absolute; z-index: 1; left: 13px; right: 12px; bottom: 14px; font-size: 12px; color: #e9c992; line-height: 1.8; }
 .previewCard b { font-size: 13px; font-weight: 500; color: #e2e2d6; }
@@ -102,9 +100,6 @@
   .heroTitle { margin: 35px 0 180px; }
   .heroTitle h1 { font-size: 20vw; margin-top: 14px; }
   .heroTitle h1.longTitle { font-size: 13vw; }
-  .genesisPage .heroTitle { margin: 35px 0 180px; }
-  .genesisPage .heroImage { object-position: 70% center; }
-  .heroTitle h1.coverTitle { position: static; width: auto; height: auto; margin: 14px 0 13px; overflow: visible; clip: auto; white-space: normal; font-size: 14vw; line-height: .95; text-shadow: 0 2px 24px #080c10cc; }
   .heroTitle h1.logoTitle { width: min(84vw, 390px); margin-top: 14px; }
   .subtitle { font-size: 15px; }
   .heroBottom { flex-direction: column; align-items: start; gap: 22px; }

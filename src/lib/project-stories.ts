@@ -3,8 +3,10 @@ export type ProjectStory = {
   introduction: string;
   statement: string;
   titleArtwork?: string;
+  titleArtworkSize?: [number, number];
+  hideEyebrow?: boolean;
   previewArtwork?: { src: string; alt: string; fit?: "cover" | "contain" }[];
-  platform?: string;
+  platforms?: { icon: string; label: string }[];
   pillars: { title: string; text: string }[];
   roadmap: { title: string; text: string; image?: string; alt?: string; position?: string; subtitle?: string; detail?: string; status?: string; caption?: string }[];
 };
@@ -14,11 +16,17 @@ export const projectStories: Record<string, ProjectStory> = {
     role: "Now in closed alpha",
     introduction: "Where chance meets the mind game",
     statement: "Genesis Roulette is a mobile tactical duel game that combines a roulette of chance, hidden team building and simultaneous mind-game picks, and settles ties with a physical tapping duel.",
-    platform: "Android (closed alpha)",
+    titleArtwork: "/images/projects/genesis-roulette-wordmark.png",
+    titleArtworkSize: [2041, 771],
+    hideEyebrow: true,
+    platforms: [
+      { icon: "/images/projects/platform-android.svg", label: "Android" },
+      { icon: "/images/projects/platform-ios.svg", label: "iOS" },
+    ],
     previewArtwork: [
       { src: "/images/projects/genesis-roulette-icon.png", alt: "Genesis Roulette emblem", fit: "contain" },
       { src: "/images/projects/genesis-roulette-key-art.png", alt: "The Genesis Roulette emblem glowing above a sky-city arena with floating islands and waterfalls" },
-      { src: "/images/projects/genesis-roulette-sunset-arena.png", alt: "Two rival scientists face a glowing crystal egg on an arena above the clouds at sunset" },
+      { src: "/images/projects/genesis-roulette-cover.png", alt: "Genesis Roulette cover art showing a futuristic arena, elemental eggs, and a floating drone" },
     ],
     pillars: [
       { title: "Readable risk", text: "The remaining Life and Death bullets and the next-shot Life chance are always on screen. The order is never shown, so every shot is a risk you can read." },
@@ -38,6 +46,10 @@ export const projectStories: Record<string, ProjectStory> = {
     introduction: "Where tradition meets combat",
     statement: "PUSAKA is an online multiplayer fighting game inspired by Silat, bringing the art of Malaysian martial heritage into a competitive gaming experience.",
     titleArtwork: "/images/projects/pusaka-wordmark.png",
+    platforms: [
+      { icon: "/images/projects/platform-windows.svg", label: "Windows PC (planned)" },
+      { icon: "/images/projects/platform-steam.svg", label: "Steam (planned)" },
+    ],
     previewArtwork: [
       { src: "/images/projects/pusaka-icon.png", alt: "PUSAKA game emblem", fit: "contain" },
       { src: "/images/projects/pusaka-environment.png", alt: "A sunlit Malay waterfront settlement with timber homes and a central gathering pavilion" },
