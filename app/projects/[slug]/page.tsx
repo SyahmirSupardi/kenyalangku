@@ -48,7 +48,7 @@ export default async function ProjectPage({
             <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
               {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={story.titleArtworkSize?.[0] ?? 1774} height={story.titleArtworkSize?.[1] ?? 887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
             </h1>
-            <p className={styles.subtitle}>{project.subtitle}</p>
+            {!story.hideSubtitle && <p className={styles.subtitle}>{project.subtitle}</p>}
           </div>
           <div className={styles.heroBottom}>
             <div className={styles.previewCards}>
