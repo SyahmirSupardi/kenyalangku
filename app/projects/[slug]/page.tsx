@@ -34,7 +34,7 @@ export default async function ProjectPage({
   const icons = [Compass, MoveUpRight, Users, Sparkles];
   const fullStory = slug === "pusaka" || slug === "genesis-roulette";
   return (
-    <main id="main" className={`${styles.page} ${slug === "pusaka" || story.wideProgressImages ? styles.pusakaPage : ""} ${story.wideProgressImages ? styles.wideStages : ""}`}>
+    <main id="main" className={`${styles.page} ${slug === "pusaka" || story.wideProgressImages ? styles.pusakaPage : ""}`}>
       <section className={styles.hero} aria-labelledby="project-title">
         <Image className={styles.heroImage} src={project.image} alt={project.imageAlt} fill loading="eager" fetchPriority="high" sizes="(max-width: 760px) 1320px, 100vw" />
         <div className={styles.heroShade} />
@@ -94,7 +94,7 @@ export default async function ProjectPage({
                 <li key={stage.title}>
                   <span className={styles.timelineDot} aria-hidden="true" />
                   <div className={styles.stageCopy}><p className={styles.stageLabel}>PHASE 0{i + 1} <span>{stage.status ?? "PLANNED DIRECTION"}</span></p><h3>{stage.title}</h3>{stage.subtitle && <p className={styles.stageSubtitle}>{stage.subtitle}</p>}<p>{stage.text}</p>{stage.detail && <p>{stage.detail}</p>}</div>
-                  {stage.image && <figure className={styles.stageImage}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / {stage.caption ?? "DEVELOPMENT PROGRESS"}</figcaption></figure>}
+                  {stage.image && <figure className={`${styles.stageImage} ${stage.frameless ? styles.frameless : ""}`} style={stage.ratio ? { aspectRatio: stage.ratio } : undefined}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / {stage.caption ?? "DEVELOPMENT PROGRESS"}</figcaption></figure>}
                 </li>
               ))}
             </ol>
