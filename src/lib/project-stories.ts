@@ -7,6 +7,7 @@ export type ProjectStory = {
   hideEyebrow?: boolean;
   hideSubtitle?: boolean;
   wideProgressImages?: boolean;
+  hideImageCaptions?: boolean;
   previewArtwork?: { src: string; alt: string; fit?: "cover" | "contain" }[];
   platforms?: { icon: string; label: string }[];
   pillars: { title: string; text: string }[];
@@ -23,6 +24,7 @@ export const projectStories: Record<string, ProjectStory> = {
     hideEyebrow: true,
     hideSubtitle: true,
     wideProgressImages: true,
+    hideImageCaptions: true,
     platforms: [
       { icon: "/images/projects/platform-android.svg", label: "Android" },
       { icon: "/images/projects/platform-ios.svg", label: "iOS" },

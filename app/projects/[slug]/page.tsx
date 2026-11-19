@@ -94,7 +94,7 @@ export default async function ProjectPage({
                 <li key={stage.title}>
                   <span className={styles.timelineDot} aria-hidden="true" />
                   <div className={styles.stageCopy}><p className={styles.stageLabel}>PHASE 0{i + 1} <span>{stage.status ?? "PLANNED DIRECTION"}</span></p><h3>{stage.title}</h3>{stage.subtitle && <p className={styles.stageSubtitle}>{stage.subtitle}</p>}<p>{stage.text}</p>{stage.detail && <p>{stage.detail}</p>}</div>
-                  {stage.image && <figure className={`${styles.stageImage} ${stage.frameless ? styles.frameless : ""}`} style={stage.ratio ? { aspectRatio: stage.ratio } : undefined}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / {stage.caption ?? "DEVELOPMENT PROGRESS"}</figcaption></figure>}
+                  {stage.image && <figure className={`${styles.stageImage} ${stage.frameless ? styles.frameless : ""}`} style={stage.ratio ? { aspectRatio: stage.ratio } : undefined}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} />{!story.hideImageCaptions && <figcaption>0{i + 1} / {stage.caption ?? "DEVELOPMENT PROGRESS"}</figcaption>}</figure>}
                 </li>
               ))}
             </ol>
