@@ -34,7 +34,7 @@ export default async function ProjectPage({
   const icons = [Compass, MoveUpRight, Users, Sparkles];
   const fullStory = slug === "pusaka" || slug === "genesis-roulette";
   return (
-    <main id="main" className={`${styles.page} ${slug === "pusaka" ? styles.pusakaPage : ""}`}>
+    <main id="main" className={`${styles.page} ${slug === "pusaka" || story.wideProgressImages ? styles.pusakaPage : ""} ${story.wideProgressImages ? styles.wideStages : ""}`}>
       <section className={styles.hero} aria-labelledby="project-title">
         <Image className={styles.heroImage} src={project.image} alt={project.imageAlt} fill loading="eager" fetchPriority="high" sizes="(max-width: 760px) 1320px, 100vw" />
         <div className={styles.heroShade} />

@@ -6,6 +6,7 @@ export type ProjectStory = {
   titleArtworkSize?: [number, number];
   hideEyebrow?: boolean;
   hideSubtitle?: boolean;
+  wideProgressImages?: boolean;
   previewArtwork?: { src: string; alt: string; fit?: "cover" | "contain" }[];
   platforms?: { icon: string; label: string }[];
   pillars: { title: string; text: string }[];
@@ -21,6 +22,7 @@ export const projectStories: Record<string, ProjectStory> = {
     titleArtworkSize: [2041, 771],
     hideEyebrow: true,
     hideSubtitle: true,
+    wideProgressImages: true,
     platforms: [
       { icon: "/images/projects/platform-android.svg", label: "Android" },
       { icon: "/images/projects/platform-ios.svg", label: "iOS" },
@@ -37,9 +39,9 @@ export const projectStories: Record<string, ProjectStory> = {
       { title: "A world with stakes", text: "Neptune, 3100. As The Ending draws closer, rival scientists settle real disputes at the Bench, and your hero starts at the very bottom." },
     ],
     roadmap: [
-      { title: "The First Roll", subtitle: "Concept & First Prototype", status: "COMPLETE", text: "Genesis Roulette began as a duel built on chance: a row of identical eggs, a hidden deck of Life and Death bullets, and an element cycle of Fire, Water and Nature.", detail: "This stage shaped the core rules and design pillars, and the first version of the game was built in Godot.", image: "/images/projects/genesis-roulette-cover.png", alt: "Genesis Roulette cover art showing a futuristic arena, elemental eggs, and a floating drone", position: "center", caption: "CONCEPT ART" },
-      { title: "Rebuilt for Mobile", subtitle: "Unity Production & Core Systems", status: "COMPLETE", text: "The game moved to Unity and was rebuilt for Android phones in landscape. The rules, opponents, saving, a 4-chapter Story and a 10-level Arcade ladder are in place.", detail: "Button Smash, the Esports Coliseum with its drones, six element monsters, the main menu, player profile, missions and online private rooms were added along the way.", image: "/images/projects/genesis-roulette-key-art.png", alt: "The Genesis Roulette emblem glowing above a sky-city arena", position: "50% 40%", caption: "KEY ART" },
-      { title: "Into Testers’ Hands", subtitle: "Closed Alpha & Internal Game Testing", status: "IN PROGRESS", text: "The closed alpha is now being tested on Android by invited testers with access codes. Players can take on the Story, the Arcade ladder and online matches against a friend.", detail: "Testing focuses on match feel, balance, stability and performance on phones. A tester should be able to finish a full Story run, a full Arcade run and an online match without a crash.", image: "/images/projects/genesis-roulette-elemental-clash.png", alt: "A fire lion and a water creature clash with elemental beams in the arena", position: "center 42%", caption: "ARTWORK" },
+      { title: "The First Roll", subtitle: "Concept & First Prototype", status: "COMPLETE", text: "Genesis Roulette began as a duel built on chance: a row of identical eggs, a hidden deck of Life and Death bullets, and an element cycle of Fire, Water and Nature.", detail: "This stage shaped the core rules and design pillars that the game is built on.", image: "/images/projects/genesis-roulette-progress-01.png", alt: "Genesis Roulette gameplay on a phone: a roulette turn against The Warden, with the egg table, the shared Life and Death pool and perks" },
+      { title: "Rebuilt for Mobile", subtitle: "Unity Production & Core Systems", status: "COMPLETE", text: "The game moved to Unity and was rebuilt for Android phones in landscape. The rules, opponents, saving, a 4-chapter Story and a 10-level Arcade ladder are in place.", detail: "Button Smash, the Esports Coliseum with its drones, six element monsters, the main menu, player profile, missions and online private rooms were added along the way.", image: "/images/projects/genesis-roulette-progress-02.gif", alt: "Looping capture of Genesis Roulette gameplay: roulette turns, element assignment and a Button Smash" },
+      { title: "Into Testers’ Hands", subtitle: "Closed Alpha & Internal Game Testing", status: "IN PROGRESS", text: "The closed alpha is now being tested on Android by invited testers with access codes. Players can take on the Story, the Arcade ladder and online matches against a friend.", detail: "Testing focuses on match feel, balance, stability and performance on phones. A tester should be able to finish a full Story run, a full Arcade run and an online match without a crash.", image: "/images/projects/genesis-roulette-progress-03.png", alt: "Genesis Roulette tester access screen asking for an access code" },
       { title: "The Next Chapter", subtitle: "Future Development", status: "UPCOMING", text: "What comes next will be shaped by the results of closed alpha testing.", detail: "Areas being explored include public matchmaking, more opponent artwork and the story scenes of the Circuit. Further milestones will be announced as Genesis Roulette takes shape." },
     ],
   },
