@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
@@ -12,3 +13,6 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Gives `next dev` local copies of the Cloudflare bindings (D1, R2) from wrangler.jsonc.
+initOpenNextCloudflareForDev();

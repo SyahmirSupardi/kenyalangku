@@ -1,0 +1,90 @@
+import { alphaEnv } from "@/src/lib/alpha/env";
+import {
+  isPlatform,
+  json,
+  normaliseEmail,
+  recordEmail,
+  sendCodeEmail,
+  slotSummary,
+  verifyTurnstile,
+} from "@/src/lib/alpha/server";
+
+type ClaimRow = { id: number; name: string; email: string; platform: "android" | "windows"; code: string; revoked_at: string | null; email_sent_at: string | null };
+
+const RESEND_COOLDOWN_MINUTES = 10;
+
+export async function POST(request: Request) {
+  let body: Record<string, unknown>;
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return json({ error: "Please fill in the form again." }, 400);
+  }
+
+  const name = String(body.name ?? "").trim().replace(/\s+/g, " ");
+  const email = normaliseEmail(body.email);
+  const platform = body.platform;
+  if (name.length < 2 || name.length > 80) return json({ error: "Please enter your name (2 to 80 characters)." }, 400);
+  if (!email) return json({ error: "Please enter a valid email address." }, 400);
+  if (!isPlatform(platform)) return json({ error: "Please choose Android or Windows." }, 400);
+  if (body.agree !== true) return json({ error: "Please accept the closed alpha terms to continue." }, 400);
+
+  try {
+    if (!(await verifyTurnstile(body.turnstileToken, request))) {
+      return json({ error: "The security check did not pass. Please try again." }, 400);
+    }
+
+    const { db, cap } = alphaEnv();
+    const sent = { ok: true, message: `Your redeem code is on its way to ${email}. Check your inbox, and your spam folder if it is not there in a few minutes.` };
+
+    // One claim per email. A repeat request re-sends the same code, at most every few minutes.
+    const existing = await db.prepare("SELECT * FROM alpha_claims WHERE email = ?1").bind(email).first<ClaimRow>();
+    if (existing) {
+      if (existing.revoked_at) return json({ error: "This email can no longer claim alpha access. Contact admin@kenyalangku.my if you think this is a mistake." }, 403);
+      const recent = await db
+        .prepare("SELECT 1 AS recent FROM alpha_claims WHERE id = ?1 AND email_sent_at > datetime('now', ?2)")
+        .bind(existing.id, `-${RESEND_COOLDOWN_MINUTES} minutes`)
+        .first();
+      if (!recent) await recordEmail(db, existing.id, await sendCodeEmail(existing));
+      return json({ ...sent, alreadyClaimed: true });
+    }
+
+    // Takes the next unused code from the game's list. The count check and the insert
+    // are one statement, so concurrent requests can never pass the cap.
+    const claimed = await db
+      .prepare(
+        `INSERT INTO alpha_claims (name, email, platform, code)
+         SELECT ?1, ?2, ?3, c.code FROM alpha_codes c
+         WHERE (c.platform IS NULL OR c.platform = ?3)
+           AND NOT EXISTS (SELECT 1 FROM alpha_claims a WHERE a.code = c.code)
+           AND (SELECT COUNT(*) FROM alpha_claims WHERE revoked_at IS NULL) < ?4
+         ORDER BY c.added_at, c.code
+         LIMIT 1
+         RETURNING id, code`,
+      )
+      .bind(name, email, platform, cap)
+      .first<{ id: number; code: string }>()
+      .catch((error: unknown) => {
+        // A second request for the same email that raced past the check above.
+        if (String(error).includes("UNIQUE constraint failed: alpha_claims.email")) return "duplicate" as const;
+        throw error;
+      });
+
+    if (claimed === "duplicate") return json({ ...sent, alreadyClaimed: true });
+    if (!claimed) {
+      const slots = await slotSummary(db, cap);
+      return json(
+        { error: slots.remaining > 0 ? `No ${platform === "android" ? "Android" : "Windows"} slots are left. Please try the other platform.` : "The closed alpha is full. Thank you for your interest.", full: slots.remaining === 0 },
+        409,
+      );
+    }
+
+    const result = await sendCodeEmail({ name, email, platform, code: claimed.code });
+    await recordEmail(db, claimed.id, result);
+    if (!result.ok) console.error("alpha email failed", result.error);
+    return json(result.ok ? sent : { ok: true, message: "Your slot is saved, but the email could not be sent just now. We will send your code to you shortly." });
+  } catch (error) {
+    console.error("alpha claim failed", error);
+    return json({ error: "Something went wrong on our side. Please try again in a moment." }, 500);
+  }
+}

@@ -1,0 +1,187 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
+import { ArrowUpRight, MailCheck } from "lucide-react";
+import styles from "./alpha.module.css";
+
+type Status = { total: number; claimed: number; remaining: number; open: boolean; turnstileSiteKey: string };
+
+type TurnstileApi = {
+  render(el: HTMLElement, options: Record<string, unknown>): string;
+  reset(id?: string): void;
+  remove(id?: string): void;
+};
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
+const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+function loadTurnstile() {
+  return new Promise<TurnstileApi>((resolve, reject) => {
+    if (window.turnstile) return resolve(window.turnstile);
+    let script = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SRC}"]`);
+    if (!script) {
+      script = document.createElement("script");
+      script.src = TURNSTILE_SRC;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+    script.addEventListener("load", () => (window.turnstile ? resolve(window.turnstile) : reject(new Error("Turnstile failed"))));
+    script.addEventListener("error", () => reject(new Error("Turnstile failed to load")));
+  });
+}
+
+export function SlotCounter({ status }: { status: Status | null }) {
+  const pct = status ? Math.min(100, (status.claimed / Math.max(1, status.total)) * 100) : 0;
+  return (
+    <div className={styles.counter} aria-live="polite">
+      <strong>{status ? status.remaining : "—"}</strong>
+      <span>{status ? `of ${status.total} tester slots left` : "Checking slots…"}</span>
+      <div className={styles.meter} aria-hidden="true"><i style={{ width: `${pct}%` }} /></div>
+    </div>
+  );
+}
+
+export default function ClaimForm() {
+  const [status, setStatus] = useState<Status | null>(null);
+  const [statusError, setStatusError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [done, setDone] = useState<{ message: string } | null>(null);
+  const [token, setToken] = useState("");
+  const widgetEl = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<string | undefined>(undefined);
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch("/api/alpha/status", { cache: "no-store" });
+      if (!res.ok) throw new Error();
+      setStatus((await res.json()) as Status);
+      setStatusError(false);
+    } catch {
+      setStatusError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Fetching the live slot count once on mount, then every 30 seconds.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void refresh();
+    const timer = window.setInterval(refresh, 30000);
+    return () => window.clearInterval(timer);
+  }, [refresh]);
+
+  const siteKey = status?.turnstileSiteKey;
+  const open = status?.open;
+  useEffect(() => {
+    if (!siteKey || !open || done || !widgetEl.current) return;
+    let cancelled = false;
+    loadTurnstile()
+      .then((api) => {
+        if (cancelled || !widgetEl.current || widgetId.current) return;
+        widgetId.current = api.render(widgetEl.current, {
+          sitekey: siteKey,
+          theme: "dark",
+          callback: (t: string) => setToken(t),
+          "expired-callback": () => setToken(""),
+          "error-callback": () => setToken(""),
+        });
+      })
+      .catch(() => setError("The security check could not load. Please disable any blocker for this page and reload."));
+    return () => {
+      cancelled = true;
+      if (widgetId.current) window.turnstile?.remove(widgetId.current);
+      widgetId.current = undefined;
+    };
+  }, [siteKey, open, done]);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setError("");
+    if (!token) return setError("Please complete the security check.");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/alpha/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          platform: data.get("platform"),
+          agree: data.get("agree") === "on",
+          turnstileToken: token,
+        }),
+      });
+      const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
+      if (!res.ok) {
+        setError(body.error ?? "Something went wrong. Please try again.");
+        window.turnstile?.reset(widgetId.current);
+        setToken("");
+      } else {
+        setDone({ message: body.message ?? "Check your inbox for your redeem code." });
+      }
+      void refresh();
+    } catch {
+      setError("We could not reach the server. Check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <>
+      <div className={styles.intro}>
+        <p className={styles.eyebrow}><i aria-hidden="true" /> GENESIS ROULETTE / CLOSED ALPHA</p>
+        <h1>Claim your <span>alpha slot.</span></h1>
+        <p className={styles.lede}>Genesis Roulette is opening to a small group of closed alpha testers. Fill in the form once and your personal redeem code arrives by email.</p>
+        <ol className={styles.steps}>
+          <li><b>01</b><span>Claim a slot with your name, email and platform.</span></li>
+          <li><b>02</b><span>Open the email and use your redeem code on the download page.</span></li>
+          <li><b>03</b><span>Install the game and type the same code when the game asks for it.</span></li>
+        </ol>
+        <SlotCounter status={status} />
+      </div>
+
+      <section className={styles.card} aria-labelledby="claim-title">
+        <div className={styles.cardHead}><h2 id="claim-title">Tester details</h2><span>ONE CLAIM PER EMAIL</span></div>
+        {done ? (
+          <div className={styles.success} role="status">
+            <h3><MailCheck size={24} aria-hidden="true" /> You’re in.</h3>
+            <p>{done.message}</p>
+            <Link className={styles.button} href="/projects/genesis-roulette/download">Go to the download page <ArrowUpRight size={18} /></Link>
+          </div>
+        ) : statusError && !status ? (
+          <div className={styles.error} role="alert">The claim service is not available right now. Please try again later.</div>
+        ) : status && !status.open ? (
+          <div className={styles.full}>
+            <h3>The closed alpha is full.</h3>
+            <p>All {status.total} tester slots have been claimed. Thank you for your interest. Follow KenyalangKu for the next chapter of Genesis Roulette.</p>
+          </div>
+        ) : (
+          <form onSubmit={submit} noValidate={false}>
+            {error && <div className={styles.error} role="alert">{error}</div>}
+            <label className={styles.field}><span>Full name</span><input name="name" autoComplete="name" required minLength={2} maxLength={80} /></label>
+            <label className={styles.field}><span>Email</span><input name="email" type="email" autoComplete="email" inputMode="email" required maxLength={254} /></label>
+            <fieldset className={styles.platforms}>
+              <legend className={styles.legend}>Platform</legend>
+              <label className={styles.platform}><input type="radio" name="platform" value="android" required defaultChecked /><span><b>Android</b><small>APK · 156 MB</small></span></label>
+              <label className={styles.platform}><input type="radio" name="platform" value="windows" /><span><b>Windows PC</b><small>Download · 193 MB</small></span></label>
+            </fieldset>
+            <label className={styles.check}>
+              <input type="checkbox" name="agree" required />
+              <span>I understand this is an unfinished closed alpha build for testing. I will keep the build and my redeem code to myself, and I agree that KenyalangKu may email me about this alpha.</span>
+            </label>
+            <div ref={widgetEl} className={styles.turnstile} />
+            <button className={styles.button} type="submit" disabled={submitting || !status}>{submitting ? "Claiming…" : "Claim my slot"} <ArrowUpRight size={18} /></button>
+            <p className={styles.note}>Your name and email are used only to send your code and to contact you about this alpha. Already claimed? Submit the same email again and we’ll resend your code, or go to the <Link href="/projects/genesis-roulette/download">download page</Link>.</p>
+          </form>
+        )}
+      </section>
+    </>
+  );
+}
