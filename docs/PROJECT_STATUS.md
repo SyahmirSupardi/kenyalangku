@@ -15,7 +15,7 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 
 ## Genesis Roulette closed alpha
 
-- Claim system (branch `genesis-roulette-alpha-claim`): `/projects/genesis-roulette/claim`, `/projects/genesis-roulette/download`, `/admin/alpha`, backed by D1 `kenyalangku-alpha` and R2 `genesis-roulette-builds`. Codes come from the game's own list (`scripts/import-alpha-codes.mjs`). Setup steps and required secrets: `docs/GENESIS_ALPHA_SETUP.md`. Not deployed until those resources exist.
+- Claim system (branch `genesis-roulette-alpha-claim`): `/projects/genesis-roulette/claim`, `/projects/genesis-roulette/download`, `/admin/alpha`, backed by D1 `kenyalangku-alpha` and R2 `genesis-roulette-closed-alpha`. Codes come from the game's own list (`scripts/import-alpha-codes.mjs`). Setup steps and required secrets: `docs/GENESIS_ALPHA_SETUP.md`. Not deployed until those resources exist.
 
 ## Release notes
 

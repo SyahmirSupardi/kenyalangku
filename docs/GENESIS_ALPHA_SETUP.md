@@ -30,9 +30,9 @@ Re-running it is safe; existing codes are skipped. Never commit the code list.
 ## 2. Builds (R2)
 
 ```sh
-npx wrangler r2 bucket create genesis-roulette-builds
-npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha.apk --file path/to/game.apk --remote
-npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha-windows.zip --file path/to/windows-build.zip --remote
+npx wrangler r2 bucket create genesis-roulette-closed-alpha
+npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha.apk --file path/to/game.apk --remote
+npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha-windows.zip --file path/to/windows-build.zip --remote
 ```
 
 The object names must match `ALPHA_BUILD_ANDROID` and `ALPHA_BUILD_WINDOWS` in `wrangler.jsonc`.
@@ -78,7 +78,7 @@ signing/admin values, then:
 ```sh
 npx wrangler d1 migrations apply kenyalangku-alpha --local
 node scripts/import-alpha-codes.mjs codes.csv --local
-npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha.apk --file some.apk --local
+npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha.apk --file some.apk --local
 npm run dev
 ```
 
