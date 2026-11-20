@@ -26,4 +26,22 @@
     "ALPHA_LINK_HOURS": "6",
     "TURNSTILE_SITE_KEY": "0x4AAAAAAGKAPS3sZFnkJ5Kv"
   }
+  ,
+  // Settings for `wrangler preview` (the Cloudflare build on pull requests).
+  // Previews point at the same claims database and bucket as production. Treat a
+  // preview URL as private: do not claim, redeem or download from it.
+  "previews": {
+    "vars": {
+      "ALPHA_CAP": "100",
+      "ALPHA_EMAIL_FROM": "KenyalangKu <admin@kenyalangku.my>",
+      "ALPHA_SITE_URL": "https://www.kenyalangku.my",
+      "ALPHA_BUILD_ANDROID": "genesis-roulette-alpha.apk",
+      "ALPHA_BUILD_WINDOWS": "genesis-roulette-alpha-windows.zip",
+      "ALPHA_LINK_HOURS": "6",
+      "TURNSTILE_SITE_KEY": "0x4AAAAAAGKAPS3sZFnkJ5Kv"
+    },
+    "d1_databases": [{ "binding": "ALPHA_DB", "database_id": "d70e654d-fa4c-4395-80a7-61ca823a1466" }],
+    "r2_buckets": [{ "binding": "ALPHA_BUILDS", "bucket_name": "genesis-roulette-closed-alpha" }],
+    "images": { "binding": "IMAGES" }
+  }
 }
