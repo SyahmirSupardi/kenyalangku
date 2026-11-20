@@ -18,8 +18,7 @@ Run these once on a computer where `npx wrangler login` uses the Cloudflare acco
 ## 1. Database
 
 ```sh
-npx wrangler d1 create kenyalangku-alpha
-# copy the printed database_id into wrangler.jsonc (d1_databases[0].database_id)
+# (done) database created as kenyalangku-alpha; its id is already in wrangler.jsonc
 npx wrangler d1 migrations apply kenyalangku-alpha --remote
 node scripts/import-alpha-codes.mjs path/to/tester-codes.csv
 ```

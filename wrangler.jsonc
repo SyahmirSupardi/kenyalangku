@@ -8,12 +8,11 @@
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "kenyalangku" }],
   "images": { "binding": "IMAGES" },
   // Genesis Roulette closed alpha: claims database and private build storage.
-  // Replace database_id with the id printed by `npx wrangler d1 create kenyalangku-alpha`.
   "d1_databases": [
     {
       "binding": "ALPHA_DB",
       "database_name": "kenyalangku-alpha",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "d70e654d-fa4c-4395-80a7-61ca823a1466",
       "migrations_dir": "migrations"
     }
   ],
