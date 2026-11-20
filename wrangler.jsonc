@@ -21,8 +21,8 @@
     "ALPHA_CAP": "100",
     "ALPHA_EMAIL_FROM": "KenyalangKu <admin@kenyalangku.my>",
     "ALPHA_SITE_URL": "https://www.kenyalangku.my",
-    "ALPHA_BUILD_ANDROID": "genesis-roulette-alpha.apk",
-    "ALPHA_BUILD_WINDOWS": "genesis-roulette-alpha-windows.zip",
+    "ALPHA_BUILD_ANDROID": "GenesisRoulette-0.2.1-tester.apk",
+    "ALPHA_BUILD_WINDOWS": "GenesisRoulette-0.2.1-win64.zip",
     "ALPHA_LINK_HOURS": "6",
     "TURNSTILE_SITE_KEY": "0x4AAAAAAGKAPS3sZFnkJ5Kv"
   }
@@ -35,8 +35,8 @@
       "ALPHA_CAP": "100",
       "ALPHA_EMAIL_FROM": "KenyalangKu <admin@kenyalangku.my>",
       "ALPHA_SITE_URL": "https://www.kenyalangku.my",
-      "ALPHA_BUILD_ANDROID": "genesis-roulette-alpha.apk",
-      "ALPHA_BUILD_WINDOWS": "genesis-roulette-alpha-windows.zip",
+      "ALPHA_BUILD_ANDROID": "GenesisRoulette-0.2.1-tester.apk",
+      "ALPHA_BUILD_WINDOWS": "GenesisRoulette-0.2.1-win64.zip",
       "ALPHA_LINK_HOURS": "6",
       "TURNSTILE_SITE_KEY": "0x4AAAAAAGKAPS3sZFnkJ5Kv"
     },

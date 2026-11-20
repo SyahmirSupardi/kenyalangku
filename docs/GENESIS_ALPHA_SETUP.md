@@ -30,12 +30,12 @@ Re-running it is safe; existing codes are skipped. Never commit the code list.
 
 ```sh
 npx wrangler r2 bucket create genesis-roulette-closed-alpha
-npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha.apk --file path/to/game.apk --remote
-npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha-windows.zip --file path/to/windows-build.zip --remote
+npx wrangler r2 object put genesis-roulette-closed-alpha/GenesisRoulette-0.2.1-tester.apk --file path/to/game.apk --remote
+npx wrangler r2 object put genesis-roulette-closed-alpha/GenesisRoulette-0.2.1-win64.zip --file path/to/windows-build.zip --remote
 ```
 
 The object names must match `ALPHA_BUILD_ANDROID` and `ALPHA_BUILD_WINDOWS` in `wrangler.jsonc`.
-To ship a new build, upload over the same name. The bucket stays private; only the Worker reads it.
+To ship a new build, upload it to the bucket, then change the two build names in `wrangler.jsonc` (`ALPHA_BUILD_ANDROID`, `ALPHA_BUILD_WINDOWS`, in both `vars` and `previews.vars`) and deploy. Or upload over the same name. The bucket stays private; only the Worker reads it.
 
 ## 3. Turnstile
 
@@ -77,7 +77,7 @@ signing/admin values, then:
 ```sh
 npx wrangler d1 migrations apply kenyalangku-alpha --local
 node scripts/import-alpha-codes.mjs codes.csv --local
-npx wrangler r2 object put genesis-roulette-closed-alpha/genesis-roulette-alpha.apk --file some.apk --local
+npx wrangler r2 object put genesis-roulette-closed-alpha/GenesisRoulette-0.2.1-tester.apk --file some.apk --local
 npm run dev
 ```
 

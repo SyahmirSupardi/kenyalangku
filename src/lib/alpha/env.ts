@@ -64,7 +64,7 @@ export function alphaEnv() {
     siteUrl: (env.ALPHA_SITE_URL ?? "https://www.kenyalangku.my").replace(/\/$/, ""),
     buildKey: (platform: Platform) =>
       platform === "android"
-        ? env.ALPHA_BUILD_ANDROID ?? "genesis-roulette-alpha.apk"
-        : env.ALPHA_BUILD_WINDOWS ?? "genesis-roulette-alpha-windows.zip",
+        ? env.ALPHA_BUILD_ANDROID ?? "GenesisRoulette-0.2.1-tester.apk"
+        : env.ALPHA_BUILD_WINDOWS ?? "GenesisRoulette-0.2.1-win64.zip",
   };
 }
