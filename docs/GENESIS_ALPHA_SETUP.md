@@ -1,0 +1,90 @@
+# Genesis Roulette closed alpha: setup
+
+The claim system lives at:
+
+- `/projects/genesis-roulette/claim`: claim form (name, email, platform, agreement, Turnstile).
+- `/projects/genesis-roulette/download`: email + redeem code, returns a private download link.
+- `/admin/alpha`: private claims list (admin token), resend email, cancel/restore codes, CSV export.
+
+How it works: each claim takes the next unused code from the game's own code list (table
+`alpha_codes` in D1), up to `ALPHA_CAP` active claims. The code is emailed through Resend from
+`admin@kenyalangku.my`. A correct email + code gives a signed link that streams the build from R2
+and expires after `ALPHA_LINK_HOURS` (default 6). Cancelling a claim stops new and existing links
+and frees the slot; it does not stop the game from accepting that code.
+
+Run these once on a computer where `npx wrangler login` uses the Cloudflare account that owns the
+`kenyalangku` Worker.
+
+## 1. Database
+
+```sh
+npx wrangler d1 create kenyalangku-alpha
+# copy the printed database_id into wrangler.jsonc (d1_databases[0].database_id)
+npx wrangler d1 migrations apply kenyalangku-alpha --remote
+node scripts/import-alpha-codes.mjs path/to/tester-codes.csv
+```
+
+The import uses the `code` column and, when a `status` column exists, only rows marked `unused`.
+Re-running it is safe; existing codes are skipped. Never commit the code list.
+
+## 2. Builds (R2)
+
+```sh
+npx wrangler r2 bucket create genesis-roulette-builds
+npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha.apk --file path/to/game.apk --remote
+npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha-windows.zip --file path/to/windows-build.zip --remote
+```
+
+The object names must match `ALPHA_BUILD_ANDROID` and `ALPHA_BUILD_WINDOWS` in `wrangler.jsonc`.
+To ship a new build, upload over the same name. The bucket stays private; only the Worker reads it.
+
+## 3. Turnstile
+
+Cloudflare dashboard > Turnstile > Add widget for `www.kenyalangku.my` and `kenyalangku.my`
+(Managed mode). Put the **site key** in `wrangler.jsonc` `vars.TURNSTILE_SITE_KEY`, then:
+
+```sh
+npx wrangler secret put TURNSTILE_SECRET_KEY
+```
+
+## 4. Email (Resend)
+
+In Resend, add the domain `kenyalangku.my` and add the DNS records it lists in Cloudflare DNS.
+These sit alongside the existing Email Routing records. Once verified, create an API key with
+sending access and run:
+
+```sh
+npx wrangler secret put RESEND_API_KEY
+```
+
+## 5. Other secrets
+
+```sh
+npx wrangler secret put ALPHA_SIGNING_SECRET   # 32+ random characters, signs download links
+npx wrangler secret put ALPHA_ADMIN_TOKEN      # 16+ characters, the password for /admin/alpha
+```
+
+## 6. Deploy
+
+```sh
+npm run deploy:cloudflare
+```
+
+## Local testing
+
+Create `.dev.vars` (git-ignored) with Cloudflare's always-pass Turnstile test keys and any
+signing/admin values, then:
+
+```sh
+npx wrangler d1 migrations apply kenyalangku-alpha --local
+node scripts/import-alpha-codes.mjs codes.csv --local
+npx wrangler r2 object put genesis-roulette-builds/genesis-roulette-alpha.apk --file some.apk --local
+npm run dev
+```
+
+```
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+ALPHA_SIGNING_SECRET=local-only-signing-secret-at-least-32-chars
+ALPHA_ADMIN_TOKEN=local-admin-token
+```

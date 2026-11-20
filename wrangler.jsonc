@@ -7,5 +7,24 @@
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "kenyalangku" }],
   "images": { "binding": "IMAGES" },
-  "previews": { "images": { "binding": "IMAGES" } }
+  // Genesis Roulette closed alpha: claims database and private build storage.
+  // Replace database_id with the id printed by `npx wrangler d1 create kenyalangku-alpha`.
+  "d1_databases": [
+    {
+      "binding": "ALPHA_DB",
+      "database_name": "kenyalangku-alpha",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [{ "binding": "ALPHA_BUILDS", "bucket_name": "genesis-roulette-builds" }],
+  "vars": {
+    "ALPHA_CAP": "100",
+    "ALPHA_EMAIL_FROM": "KenyalangKu <admin@kenyalangku.my>",
+    "ALPHA_SITE_URL": "https://www.kenyalangku.my",
+    "ALPHA_BUILD_ANDROID": "genesis-roulette-alpha.apk",
+    "ALPHA_BUILD_WINDOWS": "genesis-roulette-alpha-windows.zip",
+    "ALPHA_LINK_HOURS": "6",
+    "TURNSTILE_SITE_KEY": ""
+  }
 }
