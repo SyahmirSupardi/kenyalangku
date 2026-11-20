@@ -32,8 +32,9 @@ export default async function ProjectPage({
   const story = projectStories[slug];
   const next = projects[(projects.findIndex(p => p.slug === slug) + 1) % projects.length];
   const icons = [Compass, MoveUpRight, Users, Sparkles];
+  const fullStory = slug === "pusaka" || slug === "genesis-roulette";
   return (
-    <main id="main" className={`${styles.page} ${slug === "pusaka" ? styles.pusakaPage : ""}`}>
+    <main id="main" className={`${styles.page} ${slug === "pusaka" || story.wideProgressImages ? styles.pusakaPage : ""}`}>
       <section className={styles.hero} aria-labelledby="project-title">
         <Image className={styles.heroImage} src={project.image} alt={project.imageAlt} fill loading="eager" fetchPriority="high" sizes="(max-width: 760px) 1320px, 100vw" />
         <div className={styles.heroShade} />
@@ -43,16 +44,16 @@ export default async function ProjectPage({
             <nav aria-label="Project chapters"><a href="#story">The story</a><a href="#roadmap">Roadmap</a><a href="#connect">Connect <ArrowUpRight size={14} /></a></nav>
           </div>
           <div className={styles.heroTitle}>
-            <p className={styles.eyebrow}>{project.collection.toUpperCase()} / {project.number}</p>
-            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "genesis-roulette" ? styles.coverTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
-              {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={1774} height={887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
+            {!story.hideEyebrow && <p className={styles.eyebrow}>{project.collection.toUpperCase()} / {project.number}</p>}
+            <h1 id="project-title" className={story.titleArtwork ? styles.logoTitle : slug === "myth-tanah" ? styles.longTitle : undefined}>
+              {story.titleArtwork ? <Image className={styles.logoTitleImage} src={story.titleArtwork} alt={project.title} width={story.titleArtworkSize?.[0] ?? 1774} height={story.titleArtworkSize?.[1] ?? 887} sizes="(max-width: 760px) 84vw, 520px" priority /> : project.title}
             </h1>
-            <p className={styles.subtitle}>{project.subtitle}</p>
+            {!story.hideSubtitle && <p className={styles.subtitle}>{project.subtitle}</p>}
           </div>
           <div className={styles.heroBottom}>
             <div className={styles.previewCards}>
               {story.roadmap.slice(0, 3).map((item, i) => (
-                <a href={i === 0 ? "#story" : i === 1 ? "#roadmap" : "#experience"} className={`${styles.previewCard} ${slug === "pusaka" && i === 0 ? styles.pusakaIconCard : ""}`} key={item.title}>
+                <a href={i === 0 ? "#story" : i === 1 ? "#roadmap" : "#experience"} className={`${styles.previewCard} ${slug === "pusaka" && i === 0 ? styles.pusakaIconCard : ""} ${slug === "genesis-roulette" && i === 0 ? styles.genesisIconCard : ""}`} key={item.title}>
                   <Image src={story.previewArtwork?.[i]?.src ?? item.image ?? project.image} alt={story.previewArtwork?.[i]?.alt ?? item.alt ?? ""} fill sizes="320px" style={{ objectPosition: item.position, objectFit: story.previewArtwork?.[i]?.fit ?? "cover" }} />
                   <span>0{i + 1}<br /><b>{["The story", "The journey", "The experience"][i]}</b></span>
                   <ArrowUpRight size={15} />
@@ -62,7 +63,7 @@ export default async function ProjectPage({
             <a className={styles.discover} href="#story">Step into the world <ArrowDown size={18} /></a>
           </div>
         </div>
-        <p className={styles.artNote}>CONCEPT ARTWORK · IN DEVELOPMENT</p>
+        <p className={styles.artNote}>{slug === "genesis-roulette" ? "KEY ART · CLOSED ALPHA" : "CONCEPT ARTWORK · IN DEVELOPMENT"}</p>
       </section>
 
       <div className={styles.editorial}>
@@ -71,10 +72,10 @@ export default async function ProjectPage({
           <div className={styles.storyGrid}>
             <aside className={styles.facts}>
               <p className={styles.eyebrow}>{story.role}</p>
-              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div>{slug === "pusaka" && <div><dt>Platform</dt><dd className={styles.platformIcons}><span className={styles.visuallyHidden}>Planned for </span><span title="Windows PC (planned)"><Image src="/images/projects/platform-windows.svg" alt="Windows PC" width={23} height={23} /></span><span title="Steam (planned)"><Image src="/images/projects/platform-steam.svg" alt="Steam" width={23} height={23} /></span></dd></div>}<div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
+              <dl><div><dt>Genre</dt><dd>{project.details.slice(0, 2).join(" / ")}</dd></div><div><dt>Status</dt><dd><i />{project.status}</dd></div>{story.platforms && <div><dt>Platform</dt><dd className={styles.platformIcons}>{story.platforms.map(pl => <span key={pl.label} title={pl.label}><Image src={pl.icon} alt={pl.label} width={23} height={23} /></span>)}</dd></div>}<div><dt>Origin</dt><dd>Malaysia</dd></div></dl>
               <a href="#roadmap" className={styles.textLink}>Follow the journey <ArrowDown size={16} /></a>
             </aside>
-            <div className={styles.prose}><p className={slug === "pusaka" ? styles.pusakaLead : styles.lead}>{story.statement}</p>{(slug === "pusaka" ? project.paragraphs.slice(1) : project.paragraphs.slice(0, 2)).map(p => <p key={p}>{p}</p>)}</div>
+            <div className={styles.prose}><p className={fullStory ? styles.pusakaLead : styles.lead}>{story.statement}</p>{(fullStory ? project.paragraphs.slice(1) : project.paragraphs.slice(0, 2)).map(p => <p key={p}>{p}</p>)}</div>
           </div>
         </section>
 
@@ -85,7 +86,7 @@ export default async function ProjectPage({
               <p className={styles.eyebrow}>DEVELOPMENT ROADMAP</p>
               <h3>From the first idea<br />to the hands of players.</h3>
               <p>Each world takes time, curiosity, and careful iteration. This is the direction ahead for {project.title}.</p>
-              <p className={styles.planningNote}>{slug === "pusaka" ? "Current progress and planned direction. Release dates have not been announced." : "A proposed development sequence. Milestones and release dates have not been announced."}</p>
+              <p className={styles.planningNote}>{fullStory ? "Current progress and planned direction. Release dates have not been announced." : "A proposed development sequence. Milestones and release dates have not been announced."}</p>
               <Link className={styles.textLink} href="/collaboration">Connect about this project <ArrowUpRight size={16} /></Link>
             </div>
             <ol className={styles.timeline}>
@@ -93,7 +94,7 @@ export default async function ProjectPage({
                 <li key={stage.title}>
                   <span className={styles.timelineDot} aria-hidden="true" />
                   <div className={styles.stageCopy}><p className={styles.stageLabel}>PHASE 0{i + 1} <span>{stage.status ?? "PLANNED DIRECTION"}</span></p><h3>{stage.title}</h3>{stage.subtitle && <p className={styles.stageSubtitle}>{stage.subtitle}</p>}<p>{stage.text}</p>{stage.detail && <p>{stage.detail}</p>}</div>
-                  {stage.image && <figure className={styles.stageImage}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} /><figcaption>0{i + 1} / DEVELOPMENT PROGRESS</figcaption></figure>}
+                  {stage.image && <figure className={`${styles.stageImage} ${stage.frameless ? styles.frameless : ""}`} style={stage.ratio ? { aspectRatio: stage.ratio } : undefined}><Image src={stage.image} alt={stage.alt ?? ""} fill sizes="(max-width: 760px) 88vw, 520px" unoptimized={stage.image.endsWith(".gif")} style={{ objectPosition: stage.position }} />{!story.hideImageCaptions && <figcaption>0{i + 1} / {stage.caption ?? "DEVELOPMENT PROGRESS"}</figcaption>}</figure>}
                 </li>
               ))}
             </ol>

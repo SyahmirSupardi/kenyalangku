@@ -10,7 +10,7 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 - The Vercel project remains linked locally as an earlier hosting target. It is not the default release destination. The last verified Vercel deployment was `dpl_7jVimyx8KJY89LPARqyu6JN5XQfr` at `https://kenyalangku.vercel.app`.
 - The homepage is the standalone Kenyalang journey. Inner pages use Next.js 16. `vercel.json` sets the Next.js framework so the inner routes deploy correctly.
 - Active routes: `/`, `/about`, `/about/nazreen/assets`, `/projects`, `/projects/pusaka`, `/projects/myth-tanah`, `/projects/genesis-roulette`, `/collaboration`, and `/contact`.
-- Project ordering: PUSAKA, MYTH: TANAH, then Genesis Roulette under Special Initiatives. Nazreen's interactive asset ordering: Pavilion, then Watchtower.
+- Project ordering: PUSAKA, MYTH: TANAH, then Genesis Roulette under Special Initiatives. Genesis Roulette's page follows the PUSAKA layout (2026-11-19, from GDD v4 / Closed Alpha 0.2.1): status "Closed alpha · Internal testing", Android platform, four-phase roadmap (two complete, closed alpha in progress, next chapter upcoming), with the supplied icon, sky-city key art and Sunset Arena art. Nazreen's interactive asset ordering: Pavilion, then Watchtower.
 - About Us profiles: Syahmir Supardi, Nazreen Bin Abdul Radzak, Ku Nazrin Ardy, and Muhammad Daniel Erfan Bin Arbain. Nazrin's two photos alternate every five seconds while his profile is open.
 
 ## Release notes

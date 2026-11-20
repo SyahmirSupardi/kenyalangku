@@ -3,25 +3,48 @@ export type ProjectStory = {
   introduction: string;
   statement: string;
   titleArtwork?: string;
+  titleArtworkSize?: [number, number];
+  hideEyebrow?: boolean;
+  hideSubtitle?: boolean;
+  wideProgressImages?: boolean;
+  hideImageCaptions?: boolean;
   previewArtwork?: { src: string; alt: string; fit?: "cover" | "contain" }[];
+  platforms?: { icon: string; label: string }[];
   pillars: { title: string; text: string }[];
-  roadmap: { title: string; text: string; image?: string; alt?: string; position?: string; subtitle?: string; detail?: string; status?: string }[];
+  roadmap: { title: string; text: string; image?: string; alt?: string; position?: string; subtitle?: string; detail?: string; status?: string; caption?: string; ratio?: string; frameless?: boolean }[];
 };
 
 export const projectStories: Record<string, ProjectStory> = {
   "genesis-roulette": {
-    role: "Special initiative",
-    introduction: "A different kind of world.",
-    statement: "An original experiment where chance and competition meet.",
+    role: "Now in closed alpha",
+    introduction: "Where chance meets the mind game",
+    statement: "Genesis Roulette is a mobile tactical duel game that combines a roulette of chance, hidden team building and simultaneous mind-game picks, and settles ties with a physical tapping duel.",
+    titleArtwork: "/images/projects/genesis-roulette-wordmark.png",
+    titleArtworkSize: [2041, 771],
+    hideEyebrow: true,
+    hideSubtitle: true,
+    wideProgressImages: true,
+    hideImageCaptions: true,
+    platforms: [
+      { icon: "/images/projects/platform-android.svg", label: "Android" },
+      { icon: "/images/projects/platform-ios.svg", label: "iOS" },
+    ],
+    previewArtwork: [
+      { src: "/images/projects/genesis-roulette-icon.png", alt: "Genesis Roulette emblem", fit: "contain" },
+      { src: "/images/projects/genesis-roulette-key-art.png", alt: "The Genesis Roulette emblem glowing above a sky-city arena with floating islands and waterfalls" },
+      { src: "/images/projects/genesis-roulette-elemental-clash.png", alt: "A fire lion and a water creature clash with elemental beams in the arena" },
+    ],
     pillars: [
-      { title: "A distinct identity", text: "A colourful science-fiction setting gives this initiative a visual language of its own." },
-      { title: "Chance and choice", text: "The project explores how uncertainty and player decisions might shape a competitive experience." },
-      { title: "In development", text: "Its gameplay direction is being explored; the cover art is concept material." },
+      { title: "Readable risk", text: "The remaining Life and Death bullets and the next-shot Life chance are always on screen. The order is never shown, so every shot is a risk you can read." },
+      { title: "Fair mind games", text: "Element lineups stay private until both sides lock in, and fighters are revealed together. Victory comes from out-reading your rival, never from hidden knowledge." },
+      { title: "Skill decides ties", text: "When two fighters share an element, a 10-second Button Smash settles it. Your nerve and your thumbs decide who survives." },
+      { title: "A world with stakes", text: "Neptune, 3100. As The Ending draws closer, rival scientists settle real disputes at the Bench, and your hero starts at the very bottom." },
     ],
     roadmap: [
-      { title: "Explore the concept", text: "Define the game's identity and test the ideas behind its competitive direction.", image: "/images/projects/genesis-roulette-cover.png", alt: "Genesis Roulette concept cover art", position: "15% center" },
-      { title: "Prototype the experience", text: "Develop early playable experiments and evaluate what works through iteration.", image: "/images/projects/genesis-roulette-cover.png", alt: "Futuristic arena in Genesis Roulette cover art", position: "65% center" },
-      { title: "Share the next chapter", text: "Present more of the project when its direction is ready to share.", image: "/images/projects/genesis-roulette-cover.png", alt: "Elemental eggs in Genesis Roulette cover art", position: "50% 70%" },
+      { title: "The First Roll", subtitle: "Concept & First Prototype", status: "COMPLETE", text: "Genesis Roulette began as a duel built on chance: a row of identical eggs, a hidden deck of Life and Death bullets, and an element cycle of Fire, Water and Nature.", detail: "This stage shaped the core rules and design pillars that the game is built on.", image: "/images/projects/genesis-roulette-progress-01.png", alt: "Genesis Roulette gameplay on a phone: a roulette turn against The Warden, with the egg table, the shared Life and Death pool and perks", ratio: "1278 / 633", frameless: true },
+      { title: "Rebuilt for Mobile", subtitle: "Unity Production & Core Systems", status: "COMPLETE", text: "The game moved to Unity and was rebuilt for Android phones in landscape. The rules, opponents, saving, a 4-chapter Story and a 10-level Arcade ladder are in place.", detail: "Button Smash, the Esports Coliseum with its drones, six element monsters, the main menu, player profile, missions and online private rooms were added along the way.", image: "/images/projects/genesis-roulette-progress-02.gif", alt: "Looping capture of Genesis Roulette gameplay: roulette turns, element assignment and a Button Smash", ratio: "480 / 238", frameless: true },
+      { title: "Into Testers’ Hands", subtitle: "Closed Alpha & Internal Game Testing", status: "IN PROGRESS", text: "The closed alpha is now being tested on Android by invited testers with access codes. Players can take on the Story, the Arcade ladder and online matches against a friend.", detail: "Testing focuses on match feel, balance, stability and performance on phones. A tester should be able to finish a full Story run, a full Arcade run and an online match without a crash.", image: "/images/projects/genesis-roulette-progress-03.png", alt: "Genesis Roulette tester access screen asking for an access code", ratio: "1280 / 580" },
+      { title: "The Next Chapter", subtitle: "Future Development", status: "UPCOMING", text: "What comes next will be shaped by the results of closed alpha testing.", detail: "Areas being explored include public matchmaking, more opponent artwork and the story scenes of the Circuit. Further milestones will be announced as Genesis Roulette takes shape." },
     ],
   },
   pusaka: {
@@ -29,6 +52,10 @@ export const projectStories: Record<string, ProjectStory> = {
     introduction: "Where tradition meets combat",
     statement: "PUSAKA is an online multiplayer fighting game inspired by Silat, bringing the art of Malaysian martial heritage into a competitive gaming experience.",
     titleArtwork: "/images/projects/pusaka-wordmark.png",
+    platforms: [
+      { icon: "/images/projects/platform-windows.svg", label: "Windows PC (planned)" },
+      { icon: "/images/projects/platform-steam.svg", label: "Steam (planned)" },
+    ],
     previewArtwork: [
       { src: "/images/projects/pusaka-icon.png", alt: "PUSAKA game emblem", fit: "contain" },
       { src: "/images/projects/pusaka-environment.png", alt: "A sunlit Malay waterfront settlement with timber homes and a central gathering pavilion" },
