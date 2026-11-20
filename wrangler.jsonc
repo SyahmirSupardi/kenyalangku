@@ -24,6 +24,6 @@
     "ALPHA_BUILD_ANDROID": "genesis-roulette-alpha.apk",
     "ALPHA_BUILD_WINDOWS": "genesis-roulette-alpha-windows.zip",
     "ALPHA_LINK_HOURS": "6",
-    "TURNSTILE_SITE_KEY": ""
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAGKAPS3sZFnkJ5Kv"
   }
 }
