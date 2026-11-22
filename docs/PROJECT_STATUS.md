@@ -15,7 +15,8 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 
 ## Genesis Roulette closed alpha
 
-- Claim system (branch `genesis-roulette-alpha-claim`): `/projects/genesis-roulette/claim`, `/projects/genesis-roulette/download`, `/admin/alpha`, backed by D1 `kenyalangku-alpha` and R2 `genesis-roulette-closed-alpha`. Codes come from the game's own list (`scripts/import-alpha-codes.mjs`). Setup steps and required secrets: `docs/GENESIS_ALPHA_SETUP.md`. Not deployed until those resources exist.
+- Claim system (branch `genesis-roulette-alpha-claim`): `/projects/genesis-roulette/claim`, `/projects/genesis-roulette/download`, `/admin/alpha`, backed by D1 `kenyalangku-alpha` and R2 `genesis-roulette-closed-alpha`. Codes come from the game's own list (`scripts/import-alpha-codes.mjs`). Setup steps and required secrets: `docs/GENESIS_ALPHA_SETUP.md`. The D1 database, R2 bucket `genesis-roulette-closed-alpha`, Turnstile widget, Resend domain and Worker secrets exist in the Takeo Takeshi Cloudflare account. A claim button with a live slot count sits in the Genesis Roulette roadmap.
+- Cloudflare Workers Builds: production branch must be `main` (changed 2026-11-22; it was `cloudflare-hosting`, so earlier merges to `main` were only built as previews). Verify the live site after each release.
 
 ## Release notes
 
