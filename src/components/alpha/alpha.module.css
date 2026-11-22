@@ -32,6 +32,11 @@
 .field > span, .legend { display: block; font-size: 12px; letter-spacing: .1em; color: #cbb795; margin-bottom: 9px; text-transform: uppercase; }
 .field input { width: 100%; min-height: 48px; padding: 12px 14px; background: #060a0d; border: 1px solid #c0d0cd40; color: var(--ink); font: inherit; font-size: 15px; border-radius: 0; }
 .field input:focus-visible, .platform input:focus-visible + span, .check input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.field select { width: 100%; min-height: 48px; padding: 12px 14px; background: #060a0d; border: 1px solid #c0d0cd40; color: var(--ink); font: inherit; font-size: 15px; border-radius: 0; }
+.field select:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.field select option { background: #0b1216; color: #e2e2d6; }
+.deviceRow { display: grid; grid-template-columns: 1fr 1.2fr; gap: 14px; }
+@media (max-width: 480px) { .deviceRow { grid-template-columns: 1fr; gap: 0; } }
 .platforms { border: 0; padding: 0; margin: 0 0 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .platforms .legend { grid-column: 1 / -1; margin-bottom: 0; }
 .platform { position: relative; cursor: pointer; }

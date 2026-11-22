@@ -8,6 +8,8 @@ export type AdminClaim = {
   name: string;
   email: string;
   platform: "android" | "windows";
+  device_brand: string | null;
+  device_model: string | null;
   code: string;
   created_at: string;
   email_sent_at: string | null;

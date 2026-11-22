@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowUpRight, MailCheck } from "lucide-react";
+import { ANDROID_BRANDS } from "@/src/lib/alpha/devices";
 import styles from "./alpha.module.css";
 
 type Status = { total: number; claimed: number; remaining: number; open: boolean; turnstileSiteKey: string };
@@ -53,6 +54,7 @@ export default function ClaimForm() {
   const [error, setError] = useState("");
   const [done, setDone] = useState<{ message: string } | null>(null);
   const [token, setToken] = useState("");
+  const [platform, setPlatform] = useState<"android" | "windows">("android");
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
 
@@ -113,6 +115,8 @@ export default function ClaimForm() {
           name: data.get("name"),
           email: data.get("email"),
           platform: data.get("platform"),
+          deviceBrand: data.get("deviceBrand"),
+          deviceModel: data.get("deviceModel"),
           agree: data.get("agree") === "on",
           turnstileToken: token,
         }),
@@ -169,9 +173,24 @@ export default function ClaimForm() {
             <label className={styles.field}><span>Email</span><input name="email" type="email" autoComplete="email" inputMode="email" required maxLength={254} /></label>
             <fieldset className={styles.platforms}>
               <legend className={styles.legend}>Platform</legend>
-              <label className={styles.platform}><input type="radio" name="platform" value="android" required defaultChecked /><span><b>Android</b><small>APK · 156 MB</small></span></label>
-              <label className={styles.platform}><input type="radio" name="platform" value="windows" /><span><b>Windows PC</b><small>Download · 193 MB</small></span></label>
+              <label className={styles.platform}><input type="radio" name="platform" value="android" required checked={platform === "android"} onChange={() => setPlatform("android")} /><span><b>Android</b><small>APK · 156 MB</small></span></label>
+              <label className={styles.platform}><input type="radio" name="platform" value="windows" checked={platform === "windows"} onChange={() => setPlatform("windows")} /><span><b>Windows PC</b><small>Download · 193 MB</small></span></label>
             </fieldset>
+            {platform === "android" && (
+              <div className={styles.deviceRow}>
+                <label className={styles.field}>
+                  <span>Device brand</span>
+                  <select name="deviceBrand" required defaultValue="">
+                    <option value="" disabled>Select your brand</option>
+                    {ANDROID_BRANDS.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
+                  </select>
+                </label>
+                <label className={styles.field}>
+                  <span>Model</span>
+                  <input name="deviceModel" required maxLength={60} placeholder="e.g. Galaxy S23, Redmi Note 12" autoComplete="off" />
+                </label>
+              </div>
+            )}
             <label className={styles.check}>
               <input type="checkbox" name="agree" required />
               <span>I understand this is an unfinished closed alpha build for testing. I will keep the build and my redeem code to myself, and I agree that KenyalangKu may email me about this alpha.</span>
