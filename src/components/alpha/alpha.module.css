@@ -91,3 +91,26 @@
 @media (prefers-reduced-motion: reduce) {
   .meter i, .platform > span { transition: none; }
 }
+
+/* Roadmap call to action */
+.cta { --muted: #aab8bb; --amber: #eaa124; margin-top: 30px; padding: 20px; border: 1px solid #eaa12466; background: linear-gradient(160deg, #eaa1241f, #0b1216d9 70%); max-width: 360px; }
+.ctaEyebrow { display: flex; align-items: center; gap: 9px; font-size: 12px; letter-spacing: .14em; color: #f3d59f; margin-bottom: 14px; }
+.ctaEyebrow i { width: 7px; height: 7px; border-radius: 50%; background: #eaa124; animation: ctaPulse 1.8s ease-in-out infinite; }
+.ctaButton { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; min-height: 54px; padding: 15px 20px; background: #eaa124; color: #080c10; font-size: 15px; font-weight: 700; letter-spacing: .01em; box-shadow: 0 0 0 0 #eaa12488; animation: ctaGlow 2.4s ease-out infinite; transition: background .2s, transform .2s; }
+.ctaButton:hover { background: #f5bd5c; transform: translateY(-2px); }
+.ctaButton:focus-visible { outline: 2px solid #f5ead4; outline-offset: 3px; }
+.ctaButtonFull { background: #3a4348; color: #c5ccca; animation: none; cursor: default; }
+.ctaButtonFull:hover { background: #3a4348; transform: none; }
+.ctaCount { display: flex; align-items: baseline; gap: 10px; margin-top: 16px; }
+.ctaCount strong { font-size: 36px; font-weight: 450; letter-spacing: -.04em; line-height: 1; color: #f5ead4; }
+.ctaCount span { font-size: 13px; color: var(--muted); }
+.ctaMeter { height: 3px; margin-top: 12px; background: #c0d0cd22; }
+.ctaMeter i { display: block; height: 100%; background: var(--amber); transition: width .6s ease; }
+.ctaNote { margin-top: 12px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+@keyframes ctaGlow { 0% { box-shadow: 0 0 0 0 #eaa12499; } 70%, 100% { box-shadow: 0 0 0 14px #eaa12400; } }
+@keyframes ctaPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) {
+  .ctaButton, .ctaEyebrow i { animation: none; }
+  .ctaMeter i { transition: none; }
+}
+@media (max-width: 860px) { .cta { max-width: none; } }
