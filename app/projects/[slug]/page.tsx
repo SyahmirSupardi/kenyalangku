@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowDown, ArrowLeft, ArrowUpRight, Compass, MoveUpRight, Sparkles, Users } from "lucide-react";
 import { projects } from "@/src/lib/content";
 import { projectStories } from "@/src/lib/project-stories";
+import ClaimCta from "@/src/components/alpha/ClaimCta";
 import styles from "./project.module.css";
 export function generateStaticParams() {
   return projects.map(({ slug }) => ({ slug }));
@@ -88,6 +89,7 @@ export default async function ProjectPage({
               <p>Each world takes time, curiosity, and careful iteration. This is the direction ahead for {project.title}.</p>
               <p className={styles.planningNote}>{fullStory ? "Current progress and planned direction. Release dates have not been announced." : "A proposed development sequence. Milestones and release dates have not been announced."}</p>
               <Link className={styles.textLink} href="/collaboration">Connect about this project <ArrowUpRight size={16} /></Link>
+              {slug === "genesis-roulette" && <ClaimCta />}
             </div>
             <ol className={styles.timeline}>
               {story.roadmap.map((stage, i) => (
