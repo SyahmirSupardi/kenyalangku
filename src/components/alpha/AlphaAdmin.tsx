@@ -9,6 +9,8 @@ type Claim = {
   name: string;
   email: string;
   platform: "android" | "windows";
+  device_brand: string | null;
+  device_model: string | null;
   code: string;
   created_at: string;
   email_sent_at: string | null;
@@ -151,15 +153,16 @@ export default function AlphaAdmin() {
       {error && <div className={styles.error} role="alert">{error}</div>}
       <div className={styles.tableWrap}>
         <table className={styles.table}>
-          <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Platform</th><th>Code</th><th>Claimed</th><th>Email</th><th>Downloads</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Platform</th><th>Device</th><th>Code</th><th>Claimed</th><th>Email</th><th>Downloads</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>
-            {claims.length === 0 && <tr><td colSpan={10}>No claims yet.</td></tr>}
+            {claims.length === 0 && <tr><td colSpan={11}>No claims yet.</td></tr>}
             {claims.map((c) => (
               <tr key={c.id} className={c.revoked_at ? styles.revoked : undefined}>
                 <td>{c.id}</td>
                 <td>{c.name}</td>
                 <td>{c.email}</td>
                 <td>{c.platform === "android" ? "Android" : "Windows"}</td>
+                <td>{c.device_brand ? `${c.device_brand} ${c.device_model ?? ""}` : "—"}</td>
                 <td><code>{c.code}</code></td>
                 <td>{when(c.created_at)}</td>
                 <td>{c.email_sent_at ? <span className={`${styles.tag} ${styles.tagOk}`} title={when(c.email_sent_at)}>Sent</span> : <span className={`${styles.tag} ${styles.tagWarn}`} title={c.email_error ?? ""}>Not sent</span>}</td>

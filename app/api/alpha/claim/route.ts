@@ -1,4 +1,5 @@
 import { alphaEnv } from "@/src/lib/alpha/env";
+import { isAndroidBrand } from "@/src/lib/alpha/devices";
 import {
   isPlatform,
   json,
@@ -27,6 +28,14 @@ export async function POST(request: Request) {
   if (name.length < 2 || name.length > 80) return json({ error: "Please enter your name (2 to 80 characters)." }, 400);
   if (!email) return json({ error: "Please enter a valid email address." }, 400);
   if (!isPlatform(platform)) return json({ error: "Please choose Android or Windows." }, 400);
+  let deviceBrand: string | null = null;
+  let deviceModel: string | null = null;
+  if (platform === "android") {
+    deviceBrand = isAndroidBrand(body.deviceBrand) ? body.deviceBrand : null;
+    deviceModel = String(body.deviceModel ?? "").trim().replace(/\s+/g, " ");
+    if (!deviceBrand) return json({ error: "Please choose your device brand." }, 400);
+    if (deviceModel.length < 1 || deviceModel.length > 60) return json({ error: "Please enter your device model (up to 60 characters)." }, 400);
+  }
   if (body.agree !== true) return json({ error: "Please accept the closed alpha terms to continue." }, 400);
 
   try {
@@ -53,8 +62,8 @@ export async function POST(request: Request) {
     // are one statement, so concurrent requests can never pass the cap.
     const claimed = await db
       .prepare(
-        `INSERT INTO alpha_claims (name, email, platform, code)
-         SELECT ?1, ?2, ?3, c.code FROM alpha_codes c
+        `INSERT INTO alpha_claims (name, email, platform, code, device_brand, device_model)
+         SELECT ?1, ?2, ?3, c.code, ?5, ?6 FROM alpha_codes c
          WHERE (c.platform IS NULL OR c.platform = ?3)
            AND NOT EXISTS (SELECT 1 FROM alpha_claims a WHERE a.code = c.code)
            AND (SELECT COUNT(*) FROM alpha_claims WHERE revoked_at IS NULL) < ?4
@@ -62,7 +71,7 @@ export async function POST(request: Request) {
          LIMIT 1
          RETURNING id, code`,
       )
-      .bind(name, email, platform, cap)
+      .bind(name, email, platform, cap, deviceBrand, deviceModel)
       .first<{ id: number; code: string }>()
       .catch((error: unknown) => {
         // A second request for the same email that raced past the check above.

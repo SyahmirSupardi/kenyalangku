@@ -4,7 +4,7 @@ import type { AdminClaim } from "../claims/route";
 
 export const dynamic = "force-dynamic";
 
-const columns: (keyof AdminClaim)[] = ["id", "name", "email", "platform", "code", "created_at", "email_sent_at", "revoked_at", "downloads", "last_download_at"];
+const columns: (keyof AdminClaim)[] = ["id", "name", "email", "platform", "device_brand", "device_model", "code", "created_at", "email_sent_at", "revoked_at", "downloads", "last_download_at"];
 
 /* Quotes every cell and defuses spreadsheet formulas typed into the form. */
 function cell(value: unknown) {
