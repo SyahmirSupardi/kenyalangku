@@ -15,6 +15,7 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 
 ## Contact details
 
+- Email everywhere is `admin@kenyalangku.my` (Cloudflare Email Routing forwards to the studio Gmail), 2026-11-22.
 - Phone is the business WhatsApp link `https://wa.me/message/THHM6ZZSR2B7N1` (2026-11-22), shown as "Chat on WhatsApp" on the contact page card, the contact map tooltip and the footer Connect column (Next.js footer and the homepage document). It opens in a new tab.
 
 ## Genesis Roulette closed alpha

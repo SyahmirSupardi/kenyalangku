@@ -21,7 +21,7 @@ export default function ContactForm() {
     if (!name || !message) return;
     const body = `Hello Syahmir,\n\n${message}\n\nFrom: ${name}\nEmail: ${email}\nInterest: ${topic}`;
     setEmailDraft({
-      url: `mailto:kenyalangku@gmail.com?subject=${encodeURIComponent(`KenyalangKu — ${topic}`)}&body=${encodeURIComponent(body)}`,
+      url: `mailto:admin@kenyalangku.my?subject=${encodeURIComponent(`KenyalangKu — ${topic}`)}&body=${encodeURIComponent(body)}`,
       body,
     });
     setCopied(false);
@@ -107,7 +107,7 @@ export default function ContactForm() {
             <h3>Your email is ready.</h3>
             <p>
               Open your email app to review and send it to
-              kenyalangku@gmail.com. Nothing has been sent yet.
+              admin@kenyalangku.my. Nothing has been sent yet.
             </p>
             <div className="draft-actions">
               <a className="text-link" href={emailDraft.url}>

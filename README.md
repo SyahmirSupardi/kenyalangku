@@ -94,7 +94,7 @@ The site includes semantic navigation, active-route indication, a skip link, vis
 
 ## Contact behaviour
 
-The form does **not** silently submit or pretend to deliver mail. It validates input, prepares an encoded `mailto:` link addressed to `kenyalangku@gmail.com`, and lets the visitor review/send with their email app. A copy-message option and plain-text preview are included. No messages are persisted or sent to a third-party service. Direct server-side delivery would need a separately configured mail service later.
+The form does **not** silently submit or pretend to deliver mail. It validates input, prepares an encoded `mailto:` link addressed to `admin@kenyalangku.my`, and lets the visitor review/send with their email app. A copy-message option and plain-text preview are included. No messages are persisted or sent to a third-party service. Direct server-side delivery would need a separately configured mail service later.
 
 ## Art and references
 
