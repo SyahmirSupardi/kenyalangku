@@ -38,9 +38,9 @@ export default function Contact() {
           </article>
           <article className={styles.channel}>
             <Phone className={styles.icon} aria-hidden="true" strokeWidth={1.5} />
-            <h2>Phone</h2>
-            <p>Please reach us by email.</p>
-            <span>Unavailable</span>
+            <h2>WhatsApp</h2>
+            <p>Message us on our business WhatsApp.</p>
+            <a href="https://wa.me/message/THHM6ZZSR2B7N1" target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a>
           </article>
         </section>
 

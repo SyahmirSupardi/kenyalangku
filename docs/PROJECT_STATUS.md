@@ -13,6 +13,11 @@ Updated: 2026-11-06. Verify current code, Git state, and deployment before relyi
 - Project ordering: PUSAKA, MYTH: TANAH, then Genesis Roulette under Special Initiatives. Genesis Roulette's page follows the PUSAKA layout (2026-11-19, from GDD v4 / Closed Alpha 0.2.1): status "Closed alpha · Internal testing", Android platform, four-phase roadmap (two complete, closed alpha in progress, next chapter upcoming), with the supplied icon, sky-city key art and Sunset Arena art. Nazreen's interactive asset ordering: Pavilion, then Watchtower.
 - About Us profiles: Syahmir Supardi, Nazreen Bin Abdul Radzak, Ku Nazrin Ardy, and Muhammad Daniel Erfan Bin Arbain. Nazrin's two photos alternate every five seconds while his profile is open.
 
+## Contact details
+
+- Email everywhere is `admin@kenyalangku.my` (Cloudflare Email Routing forwards to the studio Gmail), 2026-11-22.
+- Phone is the business WhatsApp link `https://wa.me/message/THHM6ZZSR2B7N1` (2026-11-22), shown as "Chat on WhatsApp" on the contact page card, the contact map tooltip and the footer Connect column (Next.js footer and the homepage document). It opens in a new tab.
+
 ## Genesis Roulette closed alpha
 
 - Claim system (branch `genesis-roulette-alpha-claim`): `/projects/genesis-roulette/claim`, `/projects/genesis-roulette/download`, `/admin/alpha`, backed by D1 `kenyalangku-alpha` and R2 `genesis-roulette-closed-alpha`. Codes come from the game's own list (`scripts/import-alpha-codes.mjs`). Setup steps and required secrets: `docs/GENESIS_ALPHA_SETUP.md`. The D1 database, R2 bucket `genesis-roulette-closed-alpha`, Turnstile widget, Resend domain and Worker secrets exist in the Takeo Takeshi Cloudflare account. A claim button with a live slot count sits in the Genesis Roulette roadmap.

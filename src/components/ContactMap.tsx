@@ -94,8 +94,8 @@ export default function ContactMap() {
           <span className={styles.tooltipKicker}>KENYALANGKU / MALAYSIA</span>
           <strong>Kuching, Sarawak</strong>
           <span>1.5533° N · 110.3593° E</span>
-          <a href="mailto:kenyalangku@gmail.com">kenyalangku@gmail.com</a>
-          <span>Phone unavailable</span>
+          <a href="mailto:admin@kenyalangku.my">admin@kenyalangku.my</a>
+          <a href="https://wa.me/message/THHM6ZZSR2B7N1" target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a>
         </div>
       </details>
       <span className={styles.mapCoordinates} aria-hidden="true">01°33′ N &nbsp; 110°21′ E</span>

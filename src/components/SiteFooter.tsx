@@ -26,7 +26,8 @@ export default function SiteFooter() {
           </div>
           <div className="kk-footer7__column kk-footer7__connect">
             <h2>Connect</h2>
-            <a href="mailto:kenyalangku@gmail.com">Email the studio ↗</a>
+            <a href="mailto:admin@kenyalangku.my">Email the studio ↗</a>
+            <a href="https://wa.me/message/THHM6ZZSR2B7N1" target="_blank" rel="noopener noreferrer">Chat on WhatsApp ↗</a>
           </div>
         </div>
         <div className="kk-footer7__bottom">

@@ -73,7 +73,7 @@ export default function Navbar() {
           {links.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>)}
         </div>
         <span className="kk-navigation-panel__note">MADE IN MALAYSIA. IMAGINED FOR EVERYONE.</span>
-        <a className="kk-navigation-panel__email" href="mailto:kenyalangku@gmail.com">kenyalangku@gmail.com ↗</a>
+        <a className="kk-navigation-panel__email" href="mailto:admin@kenyalangku.my">admin@kenyalangku.my ↗</a>
       </nav>
     </header>
   );

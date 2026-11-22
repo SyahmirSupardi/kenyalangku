@@ -8,6 +8,6 @@
     const subject = encodeURIComponent('KenyalangKu studio updates request');
     const body = encodeURIComponent(`Please keep ${email} informed about future KenyalangKu studio updates.`);
     document.querySelector('#studio-updates-status').textContent = 'Your email app will open with a request. Send it to complete your request.';
-    window.location.href = `mailto:kenyalangku@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:admin@kenyalangku.my?subject=${subject}&body=${body}`;
   });
 })();
