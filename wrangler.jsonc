@@ -7,6 +7,10 @@
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "kenyalangku" }],
   "images": { "binding": "IMAGES" },
+  // Keep the live domain and the workers.dev setting in the file. Without these,
+  // every `wrangler deploy` from Cloudflare Builds removes www.kenyalangku.my.
+  "workers_dev": false,
+  "routes": [{ "pattern": "www.kenyalangku.my", "zone_name": "kenyalangku.my", "custom_domain": true }],
   // Genesis Roulette closed alpha: claims database and private build storage.
   "d1_databases": [
     {
