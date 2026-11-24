@@ -26,6 +26,8 @@ export interface BuildObject {
 export interface BuildBucket {
   get(key: string, options?: { range?: Headers }): Promise<BuildObject | null>;
   head(key: string): Promise<Omit<BuildObject, "body" | "range"> | null>;
+  put(key: string, value: ArrayBuffer | ReadableStream, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown>;
+  delete(key: string | string[]): Promise<void>;
 }
 
 declare global {

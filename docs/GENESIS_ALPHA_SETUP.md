@@ -69,6 +69,29 @@ npx wrangler secret put ALPHA_ADMIN_TOKEN      # 16+ characters, the password fo
 npm run deploy:cloudflare
 ```
 
+## 7. Player feedback
+
+Testers send bug reports and playtest feedback from `/projects/genesis-roulette/feedback`
+(linked from the Genesis Roulette roadmap and the download page). Reports are stored in the same
+D1 database (`feedback_reports`, `feedback_files`); screenshots go to the private R2 bucket under
+`feedback/<report id>/`. Read and triage them at `/admin/feedback` with the same admin token.
+
+Create the tables once:
+
+```sh
+npx wrangler d1 migrations apply kenyalangku-alpha --remote
+```
+
+or paste `migrations/0003_player_feedback.sql` into the D1 console in the Cloudflare dashboard.
+Until the tables exist the form shows an error and the admin hub says "Not set up".
+
+The form uses the same Turnstile widget, a hidden honeypot field, and a limit of 15 reports per
+email and 30 per network a day. A report is marked "Verified tester" when its email and redeem code
+match an alpha claim. The game can open the form pre-filled:
+`/projects/genesis-roulette/feedback?type=bug&build=0.2.1&platform=android&device=Galaxy%20S23&os=Android%2014`
+(`type=playtest` opens the playtest tab). Add new build numbers to `KNOWN_BUILDS` in
+`src/lib/alpha/feedback.ts`.
+
 ## Local testing
 
 Create `.dev.vars` (git-ignored) with Cloudflare's always-pass Turnstile test keys and any

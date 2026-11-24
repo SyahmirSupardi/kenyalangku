@@ -21,7 +21,22 @@ export async function GET(request: Request) {
         )
         .first<{ claims: number; downloads: number; android: number; windows: number; emailsNotSent: number; lastClaimAt: string | null }>(),
     ]);
-    return json({ genesisAlpha: { slots, ...totals } });
+    // Kept separate so the hub still loads before the feedback migration is applied.
+    const feedback = await db
+      .prepare(
+        `SELECT COUNT(*) AS reports,
+                COALESCE(SUM(CASE WHEN status = 'new' THEN 1 ELSE 0 END), 0) AS unread,
+                COALESCE(SUM(CASE WHEN kind = 'bug' THEN 1 ELSE 0 END), 0) AS bugs,
+                COALESCE(SUM(CASE WHEN kind = 'bug' AND severity = 'blocker' AND status NOT IN ('fixed', 'wont_fix', 'duplicate') THEN 1 ELSE 0 END), 0) AS openBlockers,
+                MAX(created_at) AS lastReportAt
+         FROM feedback_reports`,
+      )
+      .first<{ reports: number; unread: number; bugs: number; openBlockers: number; lastReportAt: string | null }>()
+      .catch((error: unknown) => {
+        console.error("feedback overview failed", error);
+        return null;
+      });
+    return json({ genesisAlpha: { slots, ...totals }, genesisFeedback: feedback });
   } catch (error) {
     console.error("admin overview failed", error);
     return json({ error: "Could not load the overview." }, 500);

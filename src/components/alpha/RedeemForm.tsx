@@ -66,6 +66,7 @@ export default function RedeemForm() {
                 <li>Type your redeem code when the game asks for it.</li>
               </ol>
             )}
+            <p className={styles.note}>Found a bug or have thoughts after playing? <Link href={`/projects/genesis-roulette/feedback?platform=${grant.platform}`}>Send player feedback</Link>.</p>
             <button type="button" className={`${styles.button} ${styles.ghost}`} onClick={() => setGrant(null)} style={{ marginTop: 22 }}>Use another code</button>
           </div>
         ) : (
