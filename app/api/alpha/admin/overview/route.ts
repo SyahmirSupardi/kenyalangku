@@ -15,11 +15,12 @@ export async function GET(request: Request) {
                   COALESCE(SUM(downloads), 0) AS downloads,
                   COALESCE(SUM(CASE WHEN platform = 'android' THEN 1 ELSE 0 END), 0) AS android,
                   COALESCE(SUM(CASE WHEN platform = 'windows' THEN 1 ELSE 0 END), 0) AS windows,
-                  COALESCE(SUM(CASE WHEN email_sent_at IS NULL THEN 1 ELSE 0 END), 0) AS emailsNotSent,
+                  COALESCE(SUM(CASE WHEN approved_at IS NULL THEN 1 ELSE 0 END), 0) AS pending,
+                  COALESCE(SUM(CASE WHEN approved_at IS NOT NULL AND email_sent_at IS NULL THEN 1 ELSE 0 END), 0) AS emailsNotSent,
                   MAX(created_at) AS lastClaimAt
            FROM alpha_claims WHERE revoked_at IS NULL`,
         )
-        .first<{ claims: number; downloads: number; android: number; windows: number; emailsNotSent: number; lastClaimAt: string | null }>(),
+        .first<{ claims: number; downloads: number; android: number; windows: number; pending: number; emailsNotSent: number; lastClaimAt: string | null }>(),
     ]);
     // Kept separate so the hub still loads before the feedback migration is applied.
     const feedback = await db

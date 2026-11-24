@@ -82,9 +82,12 @@
 .tag { display: inline-block; padding: 2px 8px; font-size: 12px; border: 1px solid #c0d0cd40; }
 .tagWarn { border-color: #e06a4f88; color: #f1c8bd; }
 .tagOk { border-color: #eaa12488; color: #f3d59f; }
-.rowActions { display: flex; gap: 8px; }
+.rowActions { display: flex; flex-wrap: wrap; gap: 8px; }
 .small { min-height: 34px; padding: 6px 12px; font-size: 12px; gap: 8px; }
 .revoked td { opacity: .5; }
+.pendingRow td { background: #eaa12412; }
+.pendingRow td:first-child { box-shadow: inset 2px 0 0 #eaa124; }
+.notice { margin-bottom: 18px; padding: 12px 14px; border-left: 2px solid #eaa124; background: #eaa12414; font-size: 13px; line-height: 1.6; color: #f3d59f; }
 
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; gap: 36px; }
