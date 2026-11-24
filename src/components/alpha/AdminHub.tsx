@@ -12,6 +12,7 @@ type Overview = {
     downloads: number;
     android: number;
     windows: number;
+    pending: number;
     emailsNotSent: number;
     lastClaimAt: string | null;
   };
@@ -104,7 +105,7 @@ export default function AdminHub() {
           <tbody>
             <tr>
               <td>Genesis Roulette closed alpha</td>
-              <td><span className={styles.tag}>{g.slots.remaining > 0 ? "Open" : "Full"}</span></td>
+              <td>{g.pending > 0 ? <span className={`${styles.tag} ${styles.tagWarn}`}>{g.pending} to approve</span> : <span className={styles.tag}>{g.slots.remaining > 0 ? "Open" : "Full"}</span>}</td>
               <td>
                 {g.claims} claims · {g.slots.remaining} of {g.slots.total} slots left · {g.downloads} downloads<br />
                 Android {g.android} · Windows {g.windows}{g.emailsNotSent > 0 ? ` · ${g.emailsNotSent} emails not sent` : ""}<br />

@@ -1,7 +1,7 @@
 import { alphaEnv, PLATFORMS } from "@/src/lib/alpha/env";
 import { createDownloadToken, json, normaliseEmail, safeEqual } from "@/src/lib/alpha/server";
 
-type Row = { id: number; platform: "android" | "windows"; code: string; revoked_at: string | null; failed_redeems: number };
+type Row = { id: number; platform: "android" | "windows"; code: string; revoked_at: string | null; approved_at: string | null; failed_redeems: number };
 const MAX_FAILED = 10;
 
 export async function POST(request: Request) {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
   try {
     const { db, linkHours } = alphaEnv();
-    const claim = await db.prepare("SELECT id, platform, code, revoked_at, failed_redeems FROM alpha_claims WHERE email = ?1").bind(email).first<Row>();
+    const claim = await db.prepare("SELECT id, platform, code, revoked_at, approved_at, failed_redeems FROM alpha_claims WHERE email = ?1").bind(email).first<Row>();
     if (!claim) return wrong;
     if (claim.failed_redeems >= MAX_FAILED) {
       return json({ error: "Too many wrong attempts for this email. Contact admin@kenyalangku.my to unlock it." }, 429);
@@ -28,6 +28,7 @@ export async function POST(request: Request) {
       return wrong;
     }
     if (claim.revoked_at) return json({ error: "This redeem code has been cancelled." }, 403);
+    if (!claim.approved_at) return json({ error: "Your request is still waiting for approval. We will email you once it is approved." }, 403);
     if (claim.failed_redeems > 0) await db.prepare("UPDATE alpha_claims SET failed_redeems = 0 WHERE id = ?1").bind(claim.id).run();
 
     const expiresAt = Math.floor(Date.now() / 1000) + linkHours * 3600;

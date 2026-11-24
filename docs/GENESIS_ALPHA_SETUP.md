@@ -4,11 +4,16 @@ The claim system lives at:
 
 - `/projects/genesis-roulette/claim`: claim form (name, email, platform, agreement, Turnstile).
 - `/projects/genesis-roulette/download`: email + redeem code, returns a private download link.
-- `/admin/alpha`: private claims list (admin token), resend email, cancel/restore codes, CSV export.
+- `/admin/alpha`: private claims list (admin token), approve or reject new requests, resend email,
+  cancel/restore codes, CSV export.
 
-How it works: each claim takes the next unused code from the game's own code list (table
-`alpha_codes` in D1), up to `ALPHA_CAP` active claims. The code is emailed through Resend from
-`admin@kenyalangku.my`. A correct email + code gives a signed link that streams the build from R2
+How it works: each claim reserves the next unused code from the game's own code list (table
+`alpha_codes` in D1), up to `ALPHA_CAP` active claims, and waits for approval. Nothing is emailed at
+signup; the tester is told the code will arrive once the request is approved. In `/admin/alpha`,
+**Approve & send code** emails the code through Resend from `admin@kenyalangku.my`. **Reject**
+deletes the pending claim, frees its code and slot, emails nobody, and records the email in
+`alpha_rejections` so it cannot request again unless you press **Allow again**. Pending requests
+count toward the slot counter, so the alpha cannot be over-subscribed while you review. A correct email + code gives a signed link that streams the build from R2
 and expires after `ALPHA_LINK_HOURS` (default 6). Cancelling a claim stops new and existing links
 and frees the slot; it does not stop the game from accepting that code.
 
@@ -91,6 +96,19 @@ match an alpha claim. The game can open the form pre-filled:
 `/projects/genesis-roulette/feedback?type=bug&build=0.2.1&platform=android&device=Galaxy%20S23&os=Android%2014`
 (`type=playtest` opens the playtest tab). Add new build numbers to `KNOWN_BUILDS` in
 `src/lib/alpha/feedback.ts`.
+
+## 8. Approval before email (migration 0004)
+
+`migrations/0004_claim_approval.sql` adds `alpha_claims.approved_at` (empty = waiting for approval)
+and the `alpha_rejections` table. Existing claims are marked approved, because their codes were
+already emailed. Apply it **before** deploying the code that uses it:
+
+```sh
+npx wrangler d1 migrations apply kenyalangku-alpha --remote
+```
+
+or paste the file into the D1 console in the Cloudflare dashboard (Storage & Databases → D1 →
+kenyalangku-alpha → Console). Run it once only; a second run fails on the existing column.
 
 ## Local testing
 

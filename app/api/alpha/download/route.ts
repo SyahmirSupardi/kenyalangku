@@ -13,8 +13,8 @@ export async function GET(request: Request) {
     if (grant.expiresAt * 1000 < Date.now()) return text("This download link has expired. Get a new one from kenyalangku.my/projects/genesis-roulette/download.", 410);
 
     const { db, env, buildKey } = alphaEnv();
-    const claim = await db.prepare("SELECT revoked_at FROM alpha_claims WHERE id = ?1").bind(grant.claimId).first<{ revoked_at: string | null }>();
-    if (!claim || claim.revoked_at) return text("This redeem code has been cancelled.", 403);
+    const claim = await db.prepare("SELECT revoked_at, approved_at FROM alpha_claims WHERE id = ?1").bind(grant.claimId).first<{ revoked_at: string | null; approved_at: string | null }>();
+    if (!claim || claim.revoked_at || !claim.approved_at) return text("This redeem code has been cancelled.", 403);
     if (!env.ALPHA_BUILDS) throw new Error("ALPHA_BUILDS binding is missing");
 
     const key = buildKey(grant.platform);
