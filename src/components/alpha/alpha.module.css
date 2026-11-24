@@ -48,7 +48,8 @@
 .platform input:disabled + span { opacity: .45; cursor: not-allowed; }
 .check { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; font-size: 13px; line-height: 1.7; color: #c5ccca; margin-bottom: 22px; cursor: pointer; }
 .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--amber); }
-.turnstile { min-height: 65px; margin-bottom: 20px; }
+.turnstile { margin: 0; }
+.turnstileShown { min-height: 65px; margin-bottom: 20px; }
 .button { display: inline-flex; align-items: center; justify-content: space-between; gap: 30px; min-height: 48px; padding: 14px 22px; color: #080c10; background: var(--amber); border: 0; font: inherit; font-size: 14px; font-weight: 650; cursor: pointer; }
 .button:hover:not(:disabled) { background: #f1bd61; }
 .button:disabled { opacity: .55; cursor: not-allowed; }
