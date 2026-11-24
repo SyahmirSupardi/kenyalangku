@@ -61,6 +61,7 @@ export default function FeedbackForm() {
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [unavailable, setUnavailable] = useState(false);
   const [token, setToken] = useState("");
+  const [challenge, setChallenge] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -104,6 +105,10 @@ export default function FeedbackForm() {
         widgetId.current = api.render(widgetEl.current, {
           sitekey: siteKey,
           theme: "dark",
+          // Runs in the background. The box only appears if Cloudflare needs the visitor to click.
+          appearance: "interaction-only",
+          "before-interactive-callback": () => setChallenge(true),
+          "after-interactive-callback": () => setChallenge(false),
           callback: (t: string) => setToken(t),
           "expired-callback": () => setToken(""),
           "error-callback": () => setToken(""),
@@ -143,7 +148,7 @@ export default function FeedbackForm() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
-    if (!token) return setError("Please complete the security check.");
+    if (!token) return setError(challenge ? "Please complete the security check above the button." : "We’re still checking your connection. Please press the button again in a few seconds.");
     const data = new FormData(event.currentTarget);
     data.delete("screenshots");
     for (const f of files) data.append("screenshots", f, f.name);
@@ -307,9 +312,9 @@ export default function FeedbackForm() {
             {/* Left empty by people. Bots that fill every field are ignored. */}
             <div className={styles.trap} aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
 
-            <div ref={widgetEl} className={styles.turnstile} />
+            <div ref={widgetEl} className={challenge ? `${styles.turnstile} ${styles.turnstileShown}` : styles.turnstile} />
             <button className={styles.button} type="submit" disabled={submitting || siteKey === null}>{submitting ? "Sending…" : kind === "bug" ? "Send bug report" : "Send feedback"} <Send size={18} /></button>
-            <p className={styles.note}>Your email is used only to follow up on this report. Reports are read by the KenyalangKu team and are not public.</p>
+            <p className={styles.note}>Your email is used only to follow up on this report. Reports are read by the KenyalangKu team and are not public. Spam protection by Cloudflare Turnstile (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noreferrer">privacy</a>).</p>
           </form>
         )}
       </section>

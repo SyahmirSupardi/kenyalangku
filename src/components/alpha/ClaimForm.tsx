@@ -27,6 +27,7 @@ export default function ClaimForm() {
   const [error, setError] = useState("");
   const [done, setDone] = useState<{ message: string } | null>(null);
   const [token, setToken] = useState("");
+  const [challenge, setChallenge] = useState(false);
   const [platform, setPlatform] = useState<"android" | "windows">("android");
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
@@ -61,6 +62,10 @@ export default function ClaimForm() {
         widgetId.current = api.render(widgetEl.current, {
           sitekey: siteKey,
           theme: "dark",
+          // Runs in the background. The box only appears if Cloudflare needs the visitor to click.
+          appearance: "interaction-only",
+          "before-interactive-callback": () => setChallenge(true),
+          "after-interactive-callback": () => setChallenge(false),
           callback: (t: string) => setToken(t),
           "expired-callback": () => setToken(""),
           "error-callback": () => setToken(""),
@@ -78,7 +83,7 @@ export default function ClaimForm() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setError("");
-    if (!token) return setError("Please complete the security check.");
+    if (!token) return setError(challenge ? "Please complete the security check above the button." : "We’re still checking your connection. Please press the button again in a few seconds.");
     setSubmitting(true);
     try {
       const res = await fetch("/api/alpha/claim", {
@@ -168,9 +173,9 @@ export default function ClaimForm() {
               <input type="checkbox" name="agree" required />
               <span>I understand this is an unfinished closed alpha build for testing. I will keep the build and my redeem code to myself, and I agree that KenyalangKu may email me about this alpha.</span>
             </label>
-            <div ref={widgetEl} className={styles.turnstile} />
+            <div ref={widgetEl} className={challenge ? `${styles.turnstile} ${styles.turnstileShown}` : styles.turnstile} />
             <button className={styles.button} type="submit" disabled={submitting || !status}>{submitting ? "Claiming…" : "Claim my slot"} <ArrowUpRight size={18} /></button>
-            <p className={styles.note}>Your name and email are used only to send your code and to contact you about this alpha. Already claimed? Submit the same email again and we’ll resend your code, or go to the <Link href="/projects/genesis-roulette/download">download page</Link>.</p>
+            <p className={styles.note}>Your name and email are used only to send your code and to contact you about this alpha. Already claimed? Submit the same email again and we’ll resend your code, or go to the <Link href="/projects/genesis-roulette/download">download page</Link>. Spam protection by Cloudflare Turnstile (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noreferrer">privacy</a>).</p>
           </form>
         )}
       </section>
