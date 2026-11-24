@@ -52,6 +52,12 @@ export default function ClaimCta() {
       </div>
       <div className={styles.ctaMeter} aria-hidden="true"><i style={{ width: `${pct}%` }} /></div>
       <p className={styles.ctaNote}>Fill in a short form first. Your redeem code is emailed to you.</p>
+      <div className={styles.ctaFeedback}>
+        <p>Already testing?</p>
+        <Link href="/projects/genesis-roulette/feedback">
+          Report a bug or share feedback <ArrowUpRight size={16} aria-hidden="true" />
+        </Link>
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@ type Overview = {
     emailsNotSent: number;
     lastClaimAt: string | null;
   };
+  genesisFeedback: { reports: number; unread: number; bugs: number; openBlockers: number; lastReportAt: string | null } | null;
 };
 
 // Same key as the alpha claims page, so signing in here also opens that page.
@@ -34,8 +35,8 @@ const saveToken = (value: string) => {
     /* private mode: keep the token in memory only */
   }
 };
-const when = (value: string | null) =>
-  value ? new Date(`${value.replace(" ", "T")}Z`).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "No claims yet";
+const when = (value: string | null, empty = "No claims yet") =>
+  value ? new Date(`${value.replace(" ", "T")}Z`).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : empty;
 
 export default function AdminHub() {
   const [data, setData] = useState<Overview | null>(null);
@@ -88,6 +89,7 @@ export default function AdminHub() {
   }
 
   const g = data.genesisAlpha;
+  const f = data.genesisFeedback;
   return (
     <section aria-labelledby="hub-title">
       <p className={styles.eyebrow}><i aria-hidden="true" /> KENYALANGKU / ADMIN</p>
@@ -109,6 +111,22 @@ export default function AdminHub() {
                 Last claim: {when(g.lastClaimAt)}
               </td>
               <td><Link className={`${styles.button} ${styles.small}`} href="/admin/alpha">Open claims <ArrowUpRight size={15} /></Link></td>
+            </tr>
+            <tr>
+              <td>Genesis Roulette player feedback</td>
+              <td>{f ? <span className={`${styles.tag} ${f.unread > 0 ? styles.tagWarn : ""}`}>{f.unread > 0 ? `${f.unread} new` : "Up to date"}</span> : <span className={`${styles.tag} ${styles.tagWarn}`}>Not set up</span>}</td>
+              <td>
+                {f ? (
+                  <>
+                    {f.reports} reports · {f.bugs} bugs · {f.reports - f.bugs} playtest reviews<br />
+                    {f.openBlockers} open blockers<br />
+                    Last report: {when(f.lastReportAt, "No reports yet")}
+                  </>
+                ) : (
+                  "Apply migration 0003_player_feedback.sql to the database."
+                )}
+              </td>
+              <td><Link className={`${styles.button} ${styles.small}`} href="/admin/feedback">Open feedback <ArrowUpRight size={15} /></Link></td>
             </tr>
           </tbody>
         </table>
