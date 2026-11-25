@@ -4,16 +4,16 @@ The claim system lives at:
 
 - `/projects/genesis-roulette/claim`: claim form (name, email, platform, agreement, Turnstile).
 - `/projects/genesis-roulette/download`: email + redeem code, returns a private download link.
-- `/admin/alpha`: private claims list (admin token), approve or reject new requests, resend email,
-  cancel/restore codes, CSV export.
+- `/admin/alpha`: private claims list (admin token), resend email, cancel/restore codes, CSV export.
 
-How it works: each claim reserves the next unused code from the game's own code list (table
-`alpha_codes` in D1), up to `ALPHA_CAP` active claims, and waits for approval. Nothing is emailed at
-signup; the tester is told the code will arrive once the request is approved. In `/admin/alpha`,
-**Approve & send code** emails the code through Resend from `admin@kenyalangku.my`. **Reject**
-deletes the pending claim, frees its code and slot, emails nobody, and records the email in
-`alpha_rejections` so it cannot request again unless you press **Allow again**. Pending requests
-count toward the slot counter, so the alpha cannot be over-subscribed while you review. A correct email + code gives a signed link that streams the build from R2
+How it works: the claim form shows a visible Cloudflare Turnstile check ("Verify you are human")
+and a hidden honeypot field; the claim button stays disabled until the check passes, and the server
+verifies the token before doing anything. Each claim then takes the next unused code from the game's
+own code list (table `alpha_codes` in D1), up to `ALPHA_CAP` active claims, and the code is emailed
+straight away through Resend from `admin@kenyalangku.my`. (From 2026-11-24 to 2026-11-25 claims
+waited for manual approval; that gate was removed. Any request still waiting from that period is
+approved and emailed when the tester submits again, or with **Approve & send code** in
+`/admin/alpha`. Emails rejected in that period stay blocked until **Allow again**.) A correct email + code gives a signed link that streams the build from R2
 and expires after `ALPHA_LINK_HOURS` (default 6). Cancelling a claim stops new and existing links
 and frees the slot; it does not stop the game from accepting that code.
 
@@ -97,9 +97,10 @@ match an alpha claim. The game can open the form pre-filled:
 (`type=playtest` opens the playtest tab). Add new build numbers to `KNOWN_BUILDS` in
 `src/lib/alpha/feedback.ts`.
 
-## 8. Approval before email (migration 0004)
+## 8. Approval columns (migration 0004)
 
-`migrations/0004_claim_approval.sql` adds `alpha_claims.approved_at` (empty = waiting for approval)
+`migrations/0004_claim_approval.sql` adds `alpha_claims.approved_at` (empty = waiting for approval;
+new claims are now approved automatically)
 and the `alpha_rejections` table. Existing claims are marked approved, because their codes were
 already emailed. Apply it **before** deploying the code that uses it:
 
