@@ -25,9 +25,8 @@ export default function ClaimForm() {
   const [statusError, setStatusError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [done, setDone] = useState<{ message: string; pending: boolean } | null>(null);
+  const [done, setDone] = useState<{ message: string } | null>(null);
   const [token, setToken] = useState("");
-  const [challenge, setChallenge] = useState(false);
   const [platform, setPlatform] = useState<"android" | "windows">("android");
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
@@ -62,10 +61,9 @@ export default function ClaimForm() {
         widgetId.current = api.render(widgetEl.current, {
           sitekey: siteKey,
           theme: "dark",
-          // Runs in the background. The box only appears if Cloudflare needs the visitor to click.
-          appearance: "interaction-only",
-          "before-interactive-callback": () => setChallenge(true),
-          "after-interactive-callback": () => setChallenge(false),
+          // Always shown on the claim form, so every visitor passes the check before claiming.
+          appearance: "always",
+          action: "alpha-claim",
           callback: (t: string) => setToken(t),
           "expired-callback": () => setToken(""),
           "error-callback": () => setToken(""),
@@ -83,7 +81,7 @@ export default function ClaimForm() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setError("");
-    if (!token) return setError(challenge ? "Please complete the security check above the button." : "We’re still checking your connection. Please press the button again in a few seconds.");
+    if (!token) return setError("Please complete the “Verify you are human” check above the button.");
     setSubmitting(true);
     try {
       const res = await fetch("/api/alpha/claim", {
@@ -96,16 +94,17 @@ export default function ClaimForm() {
           deviceBrand: data.get("deviceBrand"),
           deviceModel: data.get("deviceModel"),
           agree: data.get("agree") === "on",
+          website: data.get("website"),
           turnstileToken: token,
         }),
       });
-      const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string; pending?: boolean };
+      const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
       if (!res.ok) {
         setError(body.error ?? "Something went wrong. Please try again.");
         window.turnstile?.reset(widgetId.current);
         setToken("");
       } else {
-        setDone({ message: body.message ?? "Your request is in. We will email your redeem code once it is approved.", pending: body.pending === true });
+        setDone({ message: body.message ?? "Check your inbox for your redeem code." });
       }
       void refresh();
     } catch {
@@ -120,10 +119,10 @@ export default function ClaimForm() {
       <div className={styles.intro}>
         <p className={styles.eyebrow}><i aria-hidden="true" /> GENESIS ROULETTE / CLOSED ALPHA</p>
         <h1>Claim your <span>alpha slot.</span></h1>
-        <p className={styles.lede}>Genesis Roulette is opening to a small group of closed alpha testers. Fill in the form once. The team reviews each request, and approved testers receive a personal redeem code by email.</p>
+        <p className={styles.lede}>Genesis Roulette is opening to a small group of closed alpha testers. Fill in the form once and your personal redeem code arrives by email.</p>
         <ol className={styles.steps}>
-          <li><b>01</b><span>Request a slot with your name, email and platform.</span></li>
-          <li><b>02</b><span>Once approved, your redeem code is emailed to you. Use it on the download page.</span></li>
+          <li><b>01</b><span>Claim a slot with your name, email and platform.</span></li>
+          <li><b>02</b><span>Open the email and use your redeem code on the download page.</span></li>
           <li><b>03</b><span>Install the game and type the same code when the game asks for it.</span></li>
         </ol>
         <SlotCounter status={status} />
@@ -133,13 +132,9 @@ export default function ClaimForm() {
         <div className={styles.cardHead}><h2 id="claim-title">Tester details</h2><span>ONE CLAIM PER EMAIL</span></div>
         {done ? (
           <div className={styles.success} role="status">
-            <h3><MailCheck size={24} aria-hidden="true" /> {done.pending ? "Request received." : "You’re in."}</h3>
+            <h3><MailCheck size={24} aria-hidden="true" /> You’re in.</h3>
             <p>{done.message}</p>
-            {done.pending ? (
-              <Link className={styles.button} href="/projects/genesis-roulette">Back to Genesis Roulette <ArrowUpRight size={18} /></Link>
-            ) : (
-              <Link className={styles.button} href="/projects/genesis-roulette/download">Go to the download page <ArrowUpRight size={18} /></Link>
-            )}
+            <Link className={styles.button} href="/projects/genesis-roulette/download">Go to the download page <ArrowUpRight size={18} /></Link>
           </div>
         ) : statusError && !status ? (
           <div className={styles.error} role="alert">The claim service is not available right now. Please try again later.</div>
@@ -177,9 +172,14 @@ export default function ClaimForm() {
               <input type="checkbox" name="agree" required />
               <span>I understand this is an unfinished closed alpha build for testing. I will keep the build and my redeem code to myself, and I agree that KenyalangKu may email me about this alpha.</span>
             </label>
-            <div ref={widgetEl} className={challenge ? `${styles.turnstile} ${styles.turnstileShown}` : styles.turnstile} />
-            <button className={styles.button} type="submit" disabled={submitting || !status}>{submitting ? "Sending…" : "Request my slot"} <ArrowUpRight size={18} /></button>
-            <p className={styles.note}>Your name and email are used only to send your code and to contact you about this alpha. Already approved? Submit the same email again and we’ll resend your code, or go to the <Link href="/projects/genesis-roulette/download">download page</Link>. Spam protection by Cloudflare Turnstile (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noreferrer">privacy</a>).</p>
+            {/* Left empty by people. Bots that fill every field are ignored. */}
+            <div className={styles.trap} aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
+            <div className={styles.captcha}>
+              <span className={styles.legend}>Security check</span>
+              <div ref={widgetEl} className={`${styles.turnstile} ${styles.turnstileShown}`} />
+            </div>
+            <button className={styles.button} type="submit" disabled={submitting || !status || !token}>{submitting ? "Claiming…" : "Claim my slot"} <ArrowUpRight size={18} /></button>
+            <p className={styles.note}>Your name and email are used only to send your code and to contact you about this alpha. Already claimed? Submit the same email again and we’ll resend your code, or go to the <Link href="/projects/genesis-roulette/download">download page</Link>. Spam protection by Cloudflare Turnstile (<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noreferrer">privacy</a>).</p>
           </form>
         )}
       </section>

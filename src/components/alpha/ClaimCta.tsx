@@ -51,7 +51,7 @@ export default function ClaimCta() {
         <span>{status ? `of ${status.total} slots left` : "slots left"}</span>
       </div>
       <div className={styles.ctaMeter} aria-hidden="true"><i style={{ width: `${pct}%` }} /></div>
-      <p className={styles.ctaNote}>Fill in a short form. Once your request is approved, your redeem code is emailed to you.</p>
+      <p className={styles.ctaNote}>Fill in a short form and pass a quick security check. Your redeem code is emailed to you straight away.</p>
       <div className={styles.ctaFeedback}>
         <p>Already testing?</p>
         <Link href="/projects/genesis-roulette/feedback">
